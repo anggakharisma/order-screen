@@ -42,12 +42,10 @@ func main() {
 	db.ConnectDatabase() // Initialize Database
 	r := gin.Default()
 
-	// Health check
 	r.GET("/health", controllers.HealthCheck)
 
 	r.Group("/foods", TokenAuthMiddleware())
 	{
-		// foods
 		r.GET("/foods", controllers.FindFoods)
 		r.GET("/foods/:id", controllers.FindFood)
 
@@ -55,6 +53,13 @@ func main() {
 		r.PATCH("/foods/:id", controllers.UpdateFood)
 
 	}
+
+  r.Group("/foods", TokenAuthMiddleware())
+	{
+		r.GET("/orders", controllers.FindOrders)
+		r.GET("/orders/:id", controllers.FindOrder)
+	}
+
 
 	r.Run()
 }

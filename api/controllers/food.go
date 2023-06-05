@@ -69,10 +69,10 @@ func DeleteBook(c *gin.Context) {
 	var food models.Food
 	if err := db.DB.Where("id = ?", c.Param("id")).First(&food).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
-    return
+		return
 	}
 
-  db.DB.Delete(&food)
+	db.DB.Delete(&food)
 
-  c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
