@@ -80,7 +80,7 @@ func CreateOrder(c *gin.Context) {
 }
 
 func UpdateOrder(c *gin.Context) {
-	var order models.Order
+	//var order models.Order
 
 	c.JSON(http.StatusOK, gin.H{"data": "all orders"})
 }
