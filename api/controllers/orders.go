@@ -24,6 +24,12 @@ type OrderItemRequest struct {
 	OrderItemExtras []OrderItemExtrasRequest `json:"order_item_extras"`
 }
 
+type UpdateOrderInput struct {
+	Name        string `json:"name"`
+	OrderType   uint   `json:"order_type"`
+	OrderStatus uint   `json:"order_status"`
+}
+
 func FindOrders(c *gin.Context) {
 	var orders []models.Order
 	db.DB.Find(&orders)
@@ -54,13 +60,12 @@ func CreateOrder(c *gin.Context) {
 	for _, orderItemReq := range orderRequest.OrderItems {
 		var orderItemExtras []models.OrderItemExtra
 
-		if len(orderItemReq.OrderItemExtras) > 0 {
-			for _, orderItemExtraReq := range orderItemReq.OrderItemExtras {
-				orderItemExtras = append(orderItemExtras, models.OrderItemExtra{
-					Amount: orderItemExtraReq.Amount,
-				})
-			}
+		for _, orderItemExtraReq := range orderItemReq.OrderItemExtras {
+			orderItemExtras = append(orderItemExtras, models.OrderItemExtra{
+				Amount: orderItemExtraReq.Amount,
+			})
 		}
+
 		orderItems = append(orderItems, models.OrderItem{
 			Amount:          orderItemReq.Amount,
 			FoodId:          orderItemReq.FoodId,
@@ -75,6 +80,8 @@ func CreateOrder(c *gin.Context) {
 }
 
 func UpdateOrder(c *gin.Context) {
+	var order models.Order
+
 	c.JSON(http.StatusOK, gin.H{"data": "all orders"})
 }
 
