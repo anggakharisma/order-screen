@@ -33,7 +33,9 @@ func main() {
 	ordersRoute := r.Group("/orders")
 	{
 		ordersRoute.GET("/", controllers.FindOrders)
-		ordersRoute.GET("/orders/:id", controllers.FindOrder)
+		ordersRoute.GET("/:id", controllers.FindOrder)
+
+		ordersRoute.POST("/", controllers.CreateOrder)
 	}
 
 	r.Run("0.0.0.0:8080")

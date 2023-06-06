@@ -39,7 +39,7 @@ func FindFood(c *gin.Context) {
 func CreateFood(c *gin.Context) {
 	var req FoodRequest
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "yo"})
 		return
 	}
 
