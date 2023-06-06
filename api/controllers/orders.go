@@ -30,33 +30,8 @@ type UpdateOrderInput struct {
 	OrderStatus uint   `json:"order_status"`
 }
 
-func FindOrders(c *gin.Context) {
-	var orders []models.Order
-	db.DB.Find(&orders)
-	c.JSON(http.StatusOK, gin.H{"data": orders})
-}
-
-func FindOrder(c *gin.Context) {
-	var order models.Order
-
-	if err := db.DB.Where("id = ? ", c.Param("id")).First(&order); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Cant found that order"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"data": order})
-}
-
-func CreateOrder(c *gin.Context) {
-	var orderRequest OrderRequest
-
-	if err := c.BindJSON(&orderRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
+func convertOrderItemRequest(orderRequest *OrderRequest) []models.OrderItem {
 	var orderItems []models.OrderItem
-
 	for _, orderItemReq := range orderRequest.OrderItems {
 		var orderItemExtras []models.OrderItemExtra
 
@@ -72,7 +47,46 @@ func CreateOrder(c *gin.Context) {
 			OrderItemExtras: orderItemExtras,
 		})
 	}
+	return orderItems
+}
 
+func FindOrders(c *gin.Context) {
+	var orders []models.Order
+	db.DB.Find(&orders)
+	c.JSON(http.StatusOK, gin.H{"data": orders})
+}
+
+func FindOrder(c *gin.Context) {
+	var order models.Order
+
+	if err := db.DB.Where("id = ? ", c.Param("id")).First(&order); err.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't found that order"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": order})
+}
+
+func FindOrderItems(c *gin.Context) {
+	var order models.Order
+
+	if err := db.DB.Preload("OrderItems.OrderItemExtras").Where("id = ? ", c.Param("id")).First(&order); err.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't found that order"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": order})
+}
+
+func CreateOrder(c *gin.Context) {
+	var orderRequest OrderRequest
+
+	if err := c.BindJSON(&orderRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	orderItems := convertOrderItemRequest(&orderRequest)
 	order := models.Order{Name: orderRequest.Name, OrderType: 0, OrderStatus: 0, OrderItems: orderItems}
 	db.DB.Create(&order)
 
@@ -81,7 +95,6 @@ func CreateOrder(c *gin.Context) {
 
 func UpdateOrder(c *gin.Context) {
 	//var order models.Order
-
 	c.JSON(http.StatusOK, gin.H{"data": "all orders"})
 }
 

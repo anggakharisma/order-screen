@@ -34,6 +34,7 @@ func main() {
 	{
 		ordersRoute.GET("/", controllers.FindOrders)
 		ordersRoute.GET("/:id", controllers.FindOrder)
+    ordersRoute.GET("/:id/items", controllers.FindOrderItems)
 
 		ordersRoute.POST("/", controllers.CreateOrder)
 	}
