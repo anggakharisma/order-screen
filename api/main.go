@@ -22,14 +22,15 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		token := c.GetHeader("X-API-KEY")
+    log.Println("what")
 
 		if token == "" {
-			respondWithError(c, 401, "API token required")
+			respondWithError(c, 401, "No token")
 			return
 		}
 
 		if token != requiredToken {
-			respondWithError(c, 401, "Sus")
+			respondWithError(c, 401, "Sorry, can't do that")
 			return
 		}
 
@@ -37,29 +38,32 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-func main() {
+func init() {
 	os.Setenv("API_TOKEN", "test token")
 	db.ConnectDatabase() // Initialize Database
+}
+
+func main() {
 	r := gin.Default()
+	r.Use(gin.Logger())
 
 	r.GET("/health", controllers.HealthCheck)
 
-	r.Group("/foods", TokenAuthMiddleware())
+	foodsRoute := r.Group("/foods", TokenAuthMiddleware())
 	{
-		r.GET("/foods", controllers.FindFoods)
-		r.GET("/foods/:id", controllers.FindFood)
+		foodsRoute.GET("/", controllers.FindFoods)
+		foodsRoute.GET("/foods/:id", controllers.FindFood)
 
-		r.POST("/foods", controllers.CreateFood)
-		r.PATCH("/foods/:id", controllers.UpdateFood)
+		foodsRoute.POST("/foods", controllers.CreateFood)
+		foodsRoute.PATCH("/foods/:id", controllers.UpdateFood)
 
 	}
 
-  r.Group("/foods", TokenAuthMiddleware())
+	ordersRoute := r.Group("/orders")
 	{
-		r.GET("/orders", controllers.FindOrders)
-		r.GET("/orders/:id", controllers.FindOrder)
+		ordersRoute.GET("/", controllers.FindOrders)
+		ordersRoute.GET("/orders/:id", controllers.FindOrder)
 	}
 
-
-	r.Run()
+	r.Run("0.0.0.0:8080")
 }
