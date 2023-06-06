@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	os.Setenv("API_TOKEN", "test token")
+	os.Setenv("API_TOKEN", "v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h")
 	db.ConnectDatabase() // Initialize Database
 }
 
