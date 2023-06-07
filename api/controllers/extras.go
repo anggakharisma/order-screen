@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"spice-republic.com/api/db"
-	"spice-republic.com/api/models"
+	"github.com/anggakharisma/spice-republic/api/db"
+	"github.com/anggakharisma/spice-republic/api/models"
 )
 
 type ExtraRequest struct {

@@ -5,9 +5,9 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"spice-republic.com/api/controllers"
-	"spice-republic.com/api/db"
-	"spice-republic.com/api/middlewares"
+	"github.com/anggakharisma/spice-republic/api/controllers"
+	"github.com/anggakharisma/spice-republic/api/db"
+	"github.com/anggakharisma/spice-republic/api/middlewares"
 )
 
 func init() {

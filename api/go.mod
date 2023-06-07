@@ -1,4 +1,4 @@
-module spice-republic.com/api
+module github.com/anggakharisma/spice-republic/api
 
 go 1.18
 

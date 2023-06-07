@@ -3,7 +3,7 @@ package db
 import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"spice-republic.com/api/models"
+	"github.com/anggakharisma/spice-republic/api/models"
 )
 
 var DB *gorm.DB
