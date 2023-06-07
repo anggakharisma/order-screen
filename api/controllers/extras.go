@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/models"
+	"github.com/gin-gonic/gin"
 )
 
 type ExtraRequest struct {
@@ -46,5 +46,33 @@ func CreateExtra(c *gin.Context) {
 
 	extra := models.Extra{Name: extraRequest.Name, MeasurementTypeId: extraRequest.MeasuremntTypeID}
 	db.DB.Create(&extra)
-	c.JSON(http.StatusOK, gin.H{"data": "order " + strconv.Itoa(int(extra.ID)) + " created"})
+	c.JSON(http.StatusOK, gin.H{"data": "thanks " + strconv.Itoa(int(extra.ID)) + " created"})
+}
+
+func UpdateExtra(c *gin.Context) {
+	var extra models.Extra
+	if err := db.DB.Where("id = ?", c.Param("id")).First(&extra).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	var updateExtraInput UpdateExtraInput
+	if err := c.ShouldBindJSON(&updateExtraInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	db.DB.Model(&extra).Updates(updateExtraInput)
+}
+
+func DeleteExtra(c *gin.Context) {
+	var extra models.Food
+	if err := db.DB.Where("id = ?", c.Param("id")).First(&extra).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
+		return
+	}
+
+	db.DB.Delete(&extra)
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }

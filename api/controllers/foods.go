@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/models"
+	"github.com/gin-gonic/gin"
 )
 
 type FoodRequest struct {
@@ -56,16 +56,18 @@ func UpdateFood(c *gin.Context) {
 		return
 	}
 
-	var input UpdateFoodInput
-	if err := c.ShouldBindJSON(&input); err != nil {
+	var updateFoodInput UpdateFoodInput
+	if err := c.ShouldBindJSON(&updateFoodInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	db.DB.Model(&food).Updates(input)
+	db.DB.Model(&food).Updates(updateFoodInput)
+
+	c.JSON(http.StatusOK, gin.H{"data": food})
 }
 
-func DeleteBook(c *gin.Context) {
+func DeleteFood(c *gin.Context) {
 	var food models.Food
 	if err := db.DB.Where("id = ?", c.Param("id")).First(&food).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})

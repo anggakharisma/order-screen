@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
-	"github.com/anggakharisma/spice-republic/api/models"
 	"github.com/anggakharisma/spice-republic/api/db"
+	"github.com/anggakharisma/spice-republic/api/models"
+	"github.com/gin-gonic/gin"
 )
 
 type OrderRequest struct {
@@ -94,10 +94,18 @@ func CreateOrder(c *gin.Context) {
 }
 
 func UpdateOrder(c *gin.Context) {
-	//var order models.Order
-	c.JSON(http.StatusOK, gin.H{"data": "all orders"})
-}
+	var order models.Order
 
-func DeleteOrder(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"data": "all orders"})
+	if err := db.DB.Where("id = ?", c.Param("id")).First(&order).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	}
+
+  var UpdateOrderInput UpdateOrderInput
+	if err := c.ShouldBindJSON(&UpdateOrderInput); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+  db.DB.Model(&order).Updates(UpdateOrderInput)
+	c.JSON(http.StatusOK, gin.H{"data": order})
 }
