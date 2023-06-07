@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -15,18 +16,22 @@ func init() {
 }
 
 func main() {
+	// Logging to a file.
+	f, _ := os.Create("gin.log")
+	gin.DefaultWriter = io.MultiWriter(f)
 	r := gin.Default()
 	r.Use(gin.Logger())
+  r.Use(gin.Recovery())
 
 	r.GET("/health", controllers.HealthCheck)
 
 	foodsRoute := r.Group("/foods", middlewares.TokenAuthMiddleware())
 	{
 		foodsRoute.GET("/", controllers.FindFoods)
-		foodsRoute.GET("/foods/:id", controllers.FindFood)
+		foodsRoute.GET("/:id", controllers.FindFood)
 
-		foodsRoute.POST("/foods", controllers.CreateFood)
-		foodsRoute.PATCH("/foods/:id", controllers.UpdateFood)
+		foodsRoute.POST("/", controllers.CreateFood)
+		foodsRoute.PATCH("/:id", controllers.UpdateFood)
 
 	}
 
@@ -34,10 +39,11 @@ func main() {
 	{
 		ordersRoute.GET("/", controllers.FindOrders)
 		ordersRoute.GET("/:id", controllers.FindOrder)
-    ordersRoute.GET("/:id/items", controllers.FindOrderItems)
+		ordersRoute.GET("/:id/items", controllers.FindOrderItems)
 
 		ordersRoute.POST("/", controllers.CreateOrder)
 	}
+
 
 	r.Run("0.0.0.0:8080")
 }

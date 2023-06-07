@@ -39,12 +39,12 @@ func FindFood(c *gin.Context) {
 func CreateFood(c *gin.Context) {
 	var req FoodRequest
 	if err := c.BindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "yo"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	food := models.Food{Name: req.Name, Price: req.Price}
-	db.DB.Create(food)
+	db.DB.Create(&food)
 
 	c.JSON(http.StatusOK, gin.H{"data": food})
 }

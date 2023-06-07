@@ -70,7 +70,7 @@ func FindOrder(c *gin.Context) {
 func FindOrderItems(c *gin.Context) {
 	var order models.Order
 
-	if err := db.DB.Preload("OrderItems.OrderItemExtras").Where("id = ? ", c.Param("id")).First(&order); err.Error != nil {
+	if err := db.DB.Preload("OrderItems.Food").Preload("OrderItems.OrderItemExtras").Where("id = ? ", c.Param("id")).First(&order); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't found that order"})
 		return
 	}
