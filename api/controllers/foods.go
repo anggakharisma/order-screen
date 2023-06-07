@@ -28,7 +28,7 @@ func FindFoods(c *gin.Context) {
 func FindFood(c *gin.Context) {
 	var food models.Food
 
-	if err := db.DB.Where("id = ? ", c.Param("id")).First(&food); err != nil {
+	if err := db.DB.Where("id = ? ", c.Param("id")).First(&food); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
