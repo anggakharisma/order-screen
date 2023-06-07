@@ -48,5 +48,14 @@ func main() {
 		ordersRoute.PATCH("/:id", controllers.UpdateOrder)
 	}
 
+	extrasRoute := v1.Group("/extras")
+	{
+		extrasRoute.GET("/", controllers.FindExtras)
+		extrasRoute.GET("/:id", controllers.FindExtra)
+
+		extrasRoute.POST("/", controllers.CreateExtra)
+		extrasRoute.PATCH("/:id", controllers.UpdateExtra)
+	}
+
 	r.Run("0.0.0.0:8080")
 }

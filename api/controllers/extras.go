@@ -46,7 +46,7 @@ func CreateExtra(c *gin.Context) {
 
 	extra := models.Extra{Name: extraRequest.Name, MeasurementTypeId: extraRequest.MeasuremntTypeID}
 	db.DB.Create(&extra)
-	c.JSON(http.StatusOK, gin.H{"data": "thanks " + strconv.Itoa(int(extra.ID)) + " created"})
+	c.JSON(http.StatusOK, gin.H{"data": "extra " + strconv.Itoa(int(extra.ID)) + " created"})
 }
 
 func UpdateExtra(c *gin.Context) {
@@ -63,6 +63,7 @@ func UpdateExtra(c *gin.Context) {
 	}
 
 	db.DB.Model(&extra).Updates(updateExtraInput)
+	c.JSON(http.StatusOK, gin.H{"data": "data updated"})
 }
 
 func DeleteExtra(c *gin.Context) {
