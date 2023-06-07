@@ -11,8 +11,8 @@ import (
 )
 
 func init() {
-  os.Setenv("API_TOKEN",
-  "v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h")
+	os.Setenv("API_TOKEN",
+		"v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h")
 	db.ConnectDatabase() // Initialize Database
 }
 
@@ -45,7 +45,7 @@ func main() {
 		ordersRoute.GET("/:id/items", controllers.FindOrderItems)
 
 		ordersRoute.POST("/", controllers.CreateOrder)
-    ordersRoute.PATCH("/:id", controllers.UpdateOrder)
+		ordersRoute.PATCH("/:id", controllers.UpdateOrder)
 	}
 
 	r.Run("0.0.0.0:8080")

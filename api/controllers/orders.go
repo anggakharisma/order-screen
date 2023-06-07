@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -15,7 +16,8 @@ type OrderRequest struct {
 }
 
 type OrderItemExtrasRequest struct {
-	Amount uint `json:"amount" binding:"required"`
+	Amount  uint `json:"amount" binding:"required"`
+	ExtraId uint `json:"extra_id" binding:"required"`
 }
 
 type OrderItemRequest struct {
@@ -35,9 +37,11 @@ func convertOrderItemRequest(orderRequest *OrderRequest) []models.OrderItem {
 	for _, orderItemReq := range orderRequest.OrderItems {
 		var orderItemExtras []models.OrderItemExtra
 
+		log.Println(orderItemReq.OrderItemExtras)
 		for _, orderItemExtraReq := range orderItemReq.OrderItemExtras {
 			orderItemExtras = append(orderItemExtras, models.OrderItemExtra{
-				Amount: orderItemExtraReq.Amount,
+				Amount:  orderItemExtraReq.Amount,
+				ExtraId: orderItemExtraReq.ExtraId,
 			})
 		}
 
@@ -46,6 +50,7 @@ func convertOrderItemRequest(orderRequest *OrderRequest) []models.OrderItem {
 			FoodId:          orderItemReq.FoodId,
 			OrderItemExtras: orderItemExtras,
 		})
+
 	}
 	return orderItems
 }
@@ -100,12 +105,12 @@ func UpdateOrder(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	}
 
-  var UpdateOrderInput UpdateOrderInput
+	var UpdateOrderInput UpdateOrderInput
 	if err := c.ShouldBindJSON(&UpdateOrderInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-  db.DB.Model(&order).Updates(UpdateOrderInput)
+	db.DB.Model(&order).Updates(UpdateOrderInput)
 	c.JSON(http.StatusOK, gin.H{"data": order})
 }
