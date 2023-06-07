@@ -19,8 +19,8 @@ air
 ```
 
 ### you can use docker for development if you want
-```
-docker build -t spice-republic-api -f Dockerfile.dev .
-docker run --name spice-republic-api -dit -p 3232:8080 -v $(pwd):/usr/src/app spice-republic-api:latest
-docker exec -it spice-republic-api air
-```
+    ```
+    docker build -t spice-republic-api -f Dockerfile.dev .
+    docker run --name spice-republic-api -dit -p 3232:8080 -v $(pwd):/usr/src/app spice-republic-api:latest
+    docker exec -it spice-republic-api air
+    ```
