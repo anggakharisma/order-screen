@@ -22,7 +22,7 @@ export default function RootLayout({
         <div className="flex">
           <div className="flex px-20 w-4/5 justify-between self-start items-center align-middle">
             <Logo />
-            <p className="text-4xl">Lang</p>
+            <p className="text-xl">Lang</p>
           </div>
 
           <div className="bg-white w-64 h-screen absolute right-0 top-0">YOUR ORDER</div>
