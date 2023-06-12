@@ -2,22 +2,28 @@ package main
 
 import (
 	"io"
+	"log"
 	"os"
 
 	"github.com/anggakharisma/spice-republic/api/controllers"
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/middlewares"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func init() {
-	os.Setenv("API_TOKEN",
-		"v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h")
 	db.ConnectDatabase() // Initialize Database
 }
 
 func main() {
 	// Logging to a file.
+  err := godotenv.Load()
+
+  if err != nil {
+    log.Fatal("Error loading .env file")
+  }
+
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 	r := gin.Default()
