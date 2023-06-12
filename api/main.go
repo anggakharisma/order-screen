@@ -17,15 +17,16 @@ func init() {
 }
 
 func main() {
-	// Logging to a file.
-  err := godotenv.Load()
-
-  if err != nil {
-    log.Fatal("Error loading .env file")
-  }
+	if os.Getenv("MODE") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			log.Fatal("Error loading .env file")
+		}
+	}
 
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
+
 	r := gin.Default()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
