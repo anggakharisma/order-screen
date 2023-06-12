@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"log"
 	"os"
 
@@ -23,13 +22,7 @@ func main() {
 			log.Fatal("Error loading .env file")
 		}
 	}
-
-	f, _ := os.Create("gin.log")
-	gin.DefaultWriter = io.MultiWriter(f)
-
 	r := gin.Default()
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
 
 	r.GET("/health", controllers.HealthCheck)
 	v1 := r.Group("/v1/")
