@@ -67,7 +67,7 @@ func UpdateExtra(c *gin.Context) {
 }
 
 func DeleteExtra(c *gin.Context) {
-	var extra models.Food
+	var extra models.Extra
 	if err := db.DB.Where("id = ?", c.Param("id")).First(&extra).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return

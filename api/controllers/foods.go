@@ -96,14 +96,16 @@ func AddImage(c *gin.Context) {
 	extension := filepath.Ext(file.Filename)
 	newFileName := uuid.New().String() + extension
 
-	if err := c.SaveUploadedFile(file, "./images/foods/" + newFileName); err != nil {
-		c.String(http.StatusBadRequest, "upload file err: %s", err.Error())
+	uploadPath := "./images/foods/" + newFileName
+
+	if err := c.SaveUploadedFile(file, uploadPath); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	db.DB.Model(&food).Updates(&models.Food{
-    Image: newFileName,
-  })
+		Image: uploadPath,
+	})
 
 	c.JSON(http.StatusOK, gin.H{"message": c.Param("id") + " image added"})
 }
