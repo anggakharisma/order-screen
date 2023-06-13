@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"net/http"
+	"path/filepath"
 
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type FoodRequest struct {
@@ -28,7 +30,7 @@ func FindFoods(c *gin.Context) {
 func FindFood(c *gin.Context) {
 	var food models.Food
 
-	if err := db.DB.Where("id = ? ", c.Param("id")).First(&food); err.Error != nil {
+	if err := db.DB.Where("id = ? ", c.Param("id")).First(&food).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Record not found!"})
 		return
 	}
@@ -77,4 +79,31 @@ func DeleteFood(c *gin.Context) {
 	db.DB.Delete(&food)
 
 	c.JSON(http.StatusOK, gin.H{"data": true})
+}
+
+func AddImage(c *gin.Context) {
+	var food models.Food
+	if err := db.DB.Where("id = ?", c.Param("id")).First(&food).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "No file is received"})
+		return
+	}
+
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"data": err})
+	}
+
+	extension := filepath.Ext(file.Filename)
+	newFileName := uuid.New().String() + extension
+
+	if err := c.SaveUploadedFile(file, "./images/foods/" + newFileName); err != nil {
+		c.String(http.StatusBadRequest, "upload file err: %s", err.Error())
+		return
+	}
+
+	db.DB.Model(&food).Updates(&models.Food{
+    Image: newFileName,
+  })
+
+	c.JSON(http.StatusOK, gin.H{"message": c.Param("id") + " image added"})
 }

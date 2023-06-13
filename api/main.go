@@ -23,6 +23,7 @@ func main() {
 		}
 	}
 	r := gin.Default()
+	r.MaxMultipartMemory = 8 << 20
 
 	r.GET("/health", controllers.HealthCheck)
 	v1 := r.Group("/v1/")
@@ -33,6 +34,7 @@ func main() {
 		foodsRoute.GET("/:id", controllers.FindFood)
 
 		foodsRoute.POST("/", controllers.CreateFood)
+		foodsRoute.POST("/:id/image", controllers.AddImage)
 		foodsRoute.PATCH("/:id", controllers.UpdateFood)
 		foodsRoute.DELETE("/:id", controllers.DeleteFood)
 
