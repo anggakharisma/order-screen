@@ -30,7 +30,7 @@ To set up Spice Republic locally, follow these steps:
    cd spice-republic
    ```
 
-3. Install the dependencies for the frontend:
+3. Install the dependencies for the app:
 
    ```
    cd app
@@ -48,32 +48,37 @@ To set up Spice Republic locally, follow these steps:
 
 Before running the application, you need to configure a few settings:
 
-1. Create a `.env` file in the `frontend` directory and specify the following environment variables:
+1. Create a `.env` file in the `app` directory and specify the following environment variables:
 
    ```
    NEXT_PUBLIC_API_URL=http://localhost:8080/api
+   NEXT_PUBLIC_API_TOKEN=v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h
    ```
+2. Create a `.env` file in the `api` directory and specify the following environment variables:
+
+   ```
+   cp .env.example .env
 
 ## 🚀 Usage
 
 To start the Spice Republic application, follow these steps:
 
-1. In the `frontend` directory, run the following command:
+1. In the `app` directory, run the following command:
 
    ```
    pnpm run dev
    ```
 
-   This will start the development server for the frontend.
+   This will start the development server for the app.
 
-2. In the `backend` directory, run the following command:
+2. In the `api` directory, run the following command:
 
    ```
    cd api
    go run main.go
    ```
 
-   This will start the backend server.
+   This will start the api server.
    Check app README.md for more information, like docker usage
 
 3. Open your browser and visit `http://localhost:3000` to access Spice Republic.
