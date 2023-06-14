@@ -34,7 +34,7 @@ To set up Spice Republic locally, follow these steps:
 
    ```
    cd app
-   pnpm install
+   {pnpm, yarn, npm} install
    ```
 
 4. Install the dependencies for the backend:
