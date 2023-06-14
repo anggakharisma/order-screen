@@ -66,7 +66,7 @@ To start the Spice Republic application, follow these steps:
 1. In the `app` directory, run the following command:
 
    ```
-   pnpm run dev
+   {npm, yarn, pnpm} run dev
    ```
 
    This will start the development server for the app.
