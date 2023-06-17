@@ -96,7 +96,7 @@ func AddImage(c *gin.Context) {
 	extension := filepath.Ext(file.Filename)
 	newFileName := uuid.New().String() + extension
 
-	uploadPath := "./images/foods/" + newFileName
+	uploadPath := "images/foods/" + newFileName
 
 	if err := c.SaveUploadedFile(file, uploadPath); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

@@ -9,7 +9,7 @@ export const metadata = {
   description: 'Spice Republic',
 }
 
-const bodyClass = inter.className + " dark:bg-[#1B1B1B] bg-white text-white dark:text-[#F7F7F7] min-h-screen"
+const bodyClass = inter.className + " dark:bg-black bg-white text-white dark:text-white min-h-screen"
 
 export default function RootLayout({
   children,
@@ -22,18 +22,15 @@ export default function RootLayout({
         <div className="flex relative">
           <div className="flex px-20 w-4/5 justify-between items-center align-middle">
             <Logo />
-            <div className="relative">
+            <div className="relative flex justify-center align-middle items-center">
               <p>ID</p>
-              <div></div>
-              <div></div>
+              <div className="w-4 h-4 bg-red-400">
+              </div>
             </div>
           </div>
 
-          <div className="bg-white w-56 h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-56">
+          <div id="order" className="bg-white w-56 h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-56">
             <p className="text-black font-semibold mb-6">Your order</p>
-            <p className="text-black">ORDER 1</p>
-            <p className="text-black">ORDER 1</p>
-            <p className="text-black">ORDER 1</p> <p className="text-black">ORDER 1</p>
           </div>
         </div>
         {children}

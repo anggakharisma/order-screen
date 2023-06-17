@@ -1,28 +1,31 @@
-type Food = {
-  id: number
+interface Food {
+  ID: number
   name: string
   price: number
-  image_path: string
+  image: string
 }
 
-type OrderItem = {
-  id: number
+export interface OrderItem {
+  ID: number
   amount: number
   food_id: number
-  order_item_extras: OrderItemExtras
+  order_item_extras?: OrderItemExtras[]
 }
 
-type OrderItemExtras = {
-  id: number
+export interface OrderItemExtras {
+  ID: number
   amount: number
   extra_id: number
   order_item_id: number
 }
 
-type Order = {
-  id: number
+export interface Order {
+  ID: number
   name: string
   order_type: number
   order_status: number
   order_items: OrderItem[]
+}
+
+export interface OrderRequest extends OrderBase {
 }
