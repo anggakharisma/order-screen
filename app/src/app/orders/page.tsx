@@ -8,8 +8,8 @@ export default async function Orders() {
   return (
     <div className="w-4/5 flex px-20 mb-24">
       <div className=" elf-start">
-        <h1 className="text-3xl font-bold">Hello good morning,</h1>
-        <h3>Take yosur order here</h3>
+        <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
+        <h3>Order disini</h3>
         <Suspense fallback={<h1>Loading</h1>}>
           <div className="grid grid-cols-3 mt-8 gap-12">
             {
