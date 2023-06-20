@@ -22,7 +22,7 @@ air
 ```
 cp .env.example .env
 docker build -t spice_republic_api -f Dockerfile.dev .
-docker run --name spice_republic_api_dev -dit -p 3232:8080 -v $(pwd):/usr/src/app spice-republic-api:latest
+docker run --name spice_republic_api_dev -dit -p 3232:8080 -v $(pwd):/usr/src/app spice_republic_api:latest
 docker exec -it spice_republic_api air
 ```
 

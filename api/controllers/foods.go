@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"mime/multipart"
 	"net/http"
 	"path/filepath"
 
@@ -11,8 +12,9 @@ import (
 )
 
 type FoodRequest struct {
-	Name  string `json:"name" binding:"required"`
-	Price int    `json:"price" binding:"required"`
+	Name  string               `form:"name" binding:"required"`
+	Price int                  `form:"price" binding:"required"`
+	Image multipart.FileHeader `form:"image" binding:"required"`
 }
 
 type UpdateFoodInput struct {
@@ -40,13 +42,22 @@ func FindFood(c *gin.Context) {
 
 func CreateFood(c *gin.Context) {
 	var req FoodRequest
-	if err := c.BindJSON(&req); err != nil {
+  uploadPath := uploadImage(req.Image)
+	if err := c.Bind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	food := models.Food{Name: req.Name, Price: req.Price}
 	db.DB.Create(&food)
+
+
+	if err := c.SaveUploadedFile(&req.Image, uploadPath); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+  db.DB.Model(&food).Updates(&models.Food{Image: uploadPath})
 
 	c.JSON(http.StatusOK, gin.H{"data": food})
 }
@@ -81,31 +92,12 @@ func DeleteFood(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
 
-func AddImage(c *gin.Context) {
-	var food models.Food
-	if err := db.DB.Where("id = ?", c.Param("id")).First(&food).Error; err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "No file is received"})
-		return
-	}
-
-	file, err := c.FormFile("file")
-	if err != nil {
-		c.JSON(http.StatusOK, gin.H{"data": err})
-	}
-
+func uploadImage(file multipart.FileHeader) string {
 	extension := filepath.Ext(file.Filename)
 	newFileName := uuid.New().String() + extension
 
 	uploadPath := "images/foods/" + newFileName
 
-	if err := c.SaveUploadedFile(file, uploadPath); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+  return uploadPath;
 
-	db.DB.Model(&food).Updates(&models.Food{
-		Image: uploadPath,
-	})
-
-	c.JSON(http.StatusOK, gin.H{"message": c.Param("id") + " image added"})
 }

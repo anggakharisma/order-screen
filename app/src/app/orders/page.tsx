@@ -27,4 +27,3 @@ async function getFoods() {
   const data = await res.json();
   return data.data
 }
-

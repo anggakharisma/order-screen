@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -37,7 +36,6 @@ func convertOrderItemRequest(orderRequest *OrderRequest) []models.OrderItem {
 	for _, orderItemReq := range orderRequest.OrderItems {
 		var orderItemExtras []models.OrderItemExtra
 
-		log.Println(orderItemReq.OrderItemExtras)
 		for _, orderItemExtraReq := range orderItemReq.OrderItemExtras {
 			orderItemExtras = append(orderItemExtras, models.OrderItemExtra{
 				Amount:  orderItemExtraReq.Amount,
