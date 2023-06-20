@@ -42,8 +42,14 @@ func FindFood(c *gin.Context) {
 
 func CreateFood(c *gin.Context) {
 	var req FoodRequest
-  uploadPath := uploadImage(req.Image)
-	if err := c.Bind(&req); err != nil {
+  file, err := c.FormFile("image");
+  
+  if err != nil {
+  }
+
+	uploadPath := getFilePath(file.Filename)
+
+	if err := c.ShouldBind(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -51,13 +57,12 @@ func CreateFood(c *gin.Context) {
 	food := models.Food{Name: req.Name, Price: req.Price}
 	db.DB.Create(&food)
 
-
 	if err := c.SaveUploadedFile(&req.Image, uploadPath); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-  db.DB.Model(&food).Updates(&models.Food{Image: uploadPath})
+	db.DB.Model(&food).Updates(&models.Food{Image: uploadPath})
 
 	c.JSON(http.StatusOK, gin.H{"data": food})
 }
@@ -92,12 +97,12 @@ func DeleteFood(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": true})
 }
 
-func uploadImage(file multipart.FileHeader) string {
-	extension := filepath.Ext(file.Filename)
+func getFilePath(fileName string) string {
+	extension := filepath.Ext(fileName)
 	newFileName := uuid.New().String() + extension
 
 	uploadPath := "images/foods/" + newFileName
 
-  return uploadPath;
+	return uploadPath
 
 }
