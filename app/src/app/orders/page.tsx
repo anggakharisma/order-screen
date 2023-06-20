@@ -10,7 +10,7 @@ export default async function Orders() {
       <div className=" elf-start">
         <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
         <h3>Order disini</h3>
-        <Suspense fallback={<h1>Loading</h1>}>
+        <Suspense fallback={<h1 className="text-white bg-red-400">Loading</h1>}>
           <div className="grid grid-cols-3 mt-8 gap-12">
             {
               foods.map(food => <FoodCard food={food} key={food.ID}></FoodCard>)
@@ -23,7 +23,11 @@ export default async function Orders() {
 }
 
 async function getFoods() {
-  const res = await fetch(`http://localhost:3232/v1/foods`);
+  const res = await fetch(`${process.env.API_URL}/foods`);
+
+  if (!res.ok) {
+    throw new Error("error api might be offline");
+  }
   const data = await res.json();
   return data.data
 }
