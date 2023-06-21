@@ -1,15 +1,15 @@
-"use client"
 import { Food } from "@/type";
 import Image from "next/image";
 
 type FoodCardProps = {
-  food: Food
+  food: Food;
+  addOrderItem: (food: Food) => void
 }
 
-export default function FoodCard({ food }: FoodCardProps) {
+
+export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
   return (
-    <div className="flex h-4/6 flex-col" onClick={() => {
-    }}>
+    <div className="flex h-4/6 flex-col" onClick={() => addOrderItem(food)}>
       <div className="rounded-full max-h-64 hover:scale-110 transition-all hover:cursor-pointer">
         <Image
           src={`http://localhost:3232/${food.image}` || `/images/food01.jpg`}

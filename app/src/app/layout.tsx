@@ -35,10 +35,8 @@ export default function RootLayout({
                 </div>
               </div>
             </div>
+            <div></div>
 
-            <div id="order" className="bg-white w-[20vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-56">
-              <p className="text-black font-semibold mb-6">Order anda</p>
-            </div>
           </div>
           {children}
         </ProvidesTheQueryClient>

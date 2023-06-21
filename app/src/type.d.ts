@@ -26,3 +26,9 @@ export interface Order {
   order_status: number
   order_items: OrderItem[]
 }
+
+export interface NewOrderItem {
+  hash: string;
+  amount: number;
+  food: Food;
+}
