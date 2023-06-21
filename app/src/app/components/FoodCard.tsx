@@ -9,7 +9,6 @@ type FoodCardProps = {
 export default function FoodCard({ food }: FoodCardProps) {
   return (
     <div className="flex h-4/6 flex-col" onClick={() => {
-      console.log(food.image)
     }}>
       <div className="rounded-full max-h-64 hover:scale-110 transition-all hover:cursor-pointer">
         <Image

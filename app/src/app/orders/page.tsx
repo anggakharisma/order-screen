@@ -1,33 +1,30 @@
-import { Food } from "@/type"
+"use client";
+import { Food } from "@/type";
 import FoodCard from "../components/FoodCard";
 import { Suspense } from "react";
+import { useQuery } from "@tanstack/react-query";
 
-export default async function Orders() {
-  const foods: Food[] = await getFoods();
+export default function Orders() {
+  const { isLoading, error, data } = useQuery(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}/foods/`).then(res => res.json()));
+
+
 
   return (
     <div className="w-4/5 flex px-20 mb-24">
-      <div className=" elf-start">
+      <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
         <h3>Order disini</h3>
-        <Suspense fallback={<h1 className="text-white bg-red-400">Loading</h1>}>
-          <div className="grid grid-cols-3 mt-8 gap-12">
-            {
-              foods.map(food => <FoodCard food={food} key={food.ID}></FoodCard>)
-            }
-          </div>
-        </Suspense>
+        {error && <h1>Something wrong</h1>}
+        {
+          !isLoading ?
+            <div className="grid grid-cols-3 mt-8 gap-12">
+              {
+                data?.data.map((food: Food) => <FoodCard food={food} key={food.ID}></FoodCard>)
+              }
+            </div>
+            : <h1>Loading...</h1>
+        }
       </div>
     </div >
   )
-}
-
-async function getFoods() {
-  const res = await fetch(`${process.env.API_URL}/foods`);
-
-  if (!res.ok) {
-    throw new Error("error api might be offline");
-  }
-  const data = await res.json();
-  return data.data
 }
