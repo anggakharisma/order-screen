@@ -14,7 +14,6 @@ export default function Orders() {
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
         <h3>Order disini</h3>
-        {error && <h1>Something wrong</h1>}
         {
           !isLoading ?
             <div className="grid grid-cols-3 mt-8 gap-12">

@@ -15,6 +15,22 @@ func init() {
 	db.ConnectDatabase() // Initialize Database
 }
 
+func CORS() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	}
+}
+
 func main() {
 	if os.Getenv("MODE") != "production" {
 		err := godotenv.Load()
@@ -23,9 +39,11 @@ func main() {
 		}
 	}
 	r := gin.Default()
-	r.Static("/images", "./images")
+	r.Use(CORS())
 
+	r.Static("/images", "./images")
 	r.GET("/health", controllers.HealthCheck)
+
 	v1 := r.Group("/v1/")
 
 	foodsRoute := v1.Group("/foods", middlewares.TokenAuthMiddleware())
@@ -36,7 +54,6 @@ func main() {
 		foodsRoute.POST("/", controllers.CreateFood)
 		foodsRoute.PATCH("/:id", controllers.UpdateFood)
 		foodsRoute.DELETE("/:id", controllers.DeleteFood)
-
 	}
 
 	ordersRoute := v1.Group("/orders")
