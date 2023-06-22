@@ -6,7 +6,6 @@ type FoodCardProps = {
   addOrderItem: (food: Food) => void
 }
 
-
 export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
   return (
     <div className="flex h-4/6 flex-col" onClick={() => addOrderItem(food)}>
