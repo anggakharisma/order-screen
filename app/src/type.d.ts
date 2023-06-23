@@ -6,19 +6,19 @@ interface Food {
 }
 
 export interface OrderItem {
-  ID: number;
+  ID?: number;
   amount: number;
   food_id: number;
   order_item_extras?: OrderItemExtras[];
 }
 
 export interface MeasurementType {
-  ID: number;
+  ID?: number;
   name: string;
 }
 
 export interface Extra {
-  ID: number;
+  ID?: number;
   name: string;
   measurement_type_id: number;
 }
@@ -26,18 +26,19 @@ export interface Extra {
 export type OrderItemRequest = Omit<OrderItem, "ID">;
 
 export interface OrderItemExtras {
-  ID: number;
+  ID?: number;
   amount: number;
   extra_id: number;
-  order_item_id: number;
+  order_item_id?: number;
 }
 
 export interface Order {
-  ID: number;
+  ID?: number;
   name: string;
-  order_type: number;
-  order_status: number;
-  order_items: OrderItem[];
+}
+
+export interface OrderRequest extends Order {
+	order_items: OrderItemRequest[]
 }
 
 export type OrderItemExtraRequest = Omit<OrderItemExtras, "ID">;
