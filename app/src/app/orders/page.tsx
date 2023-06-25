@@ -19,7 +19,7 @@ export default function Orders() {
 		newOrderItems.map(item => {
 			setTotalOrder(totalOrder + item.amount * item.food.price)
 		})
-	}, [newOrderItems]);
+	}, [newOrderItems, totalOrder]);
 
 	const addOrderItem = (food: Food) => {
 		const hash = createHash("md5").update(String(food.ID) + food.name).digest("hex");
@@ -41,7 +41,6 @@ export default function Orders() {
 
 	const createOrder = () => {
 		const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
-			console.log(newOrderItem);
 			let orderItem: OrderItemRequest = {
 				amount: newOrderItem.amount,
 				food_id: newOrderItem.food.ID,
@@ -55,6 +54,8 @@ export default function Orders() {
 			name: "some input",
 			order_items: orderItems,
 		};
+
+		//send to server
 	};
 
 	return (
@@ -62,13 +63,13 @@ export default function Orders() {
 			<div className="self-start">
 				<h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
 				<h3>Order disini</h3>
-				<Foods data={data} addOrderItem={addOrderItem} isLoading={isLoading} />
+				<Foods data={data!.data} addOrderItem={addOrderItem} isLoading={isLoading} />
 			</div>
-			<div id="order" className="bg-white w-[24vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
+			<div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
 				<p className="mb-6 font-semibold text-black">Order anda</p>
 				<div className="px-4">
 					{
-						newOrderItems.map((item, id) => <OrderCard key={id} orderItem={item} />).reverse()
+						newOrderItems.map((item, id) => <OrderCard key={id} orderItem={item} />)
 					}
 					<button onClick={createOrder} className="text-3xl text-white bg-black">Order {totalOrder}</button>
 				</div>
