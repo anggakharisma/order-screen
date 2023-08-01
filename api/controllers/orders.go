@@ -48,8 +48,8 @@ func convertOrderItemRequest(orderRequest *OrderRequest) []models.OrderItem {
 			FoodId:          orderItemReq.FoodId,
 			OrderItemExtras: orderItemExtras,
 		})
-
 	}
+
 	return orderItems
 }
 

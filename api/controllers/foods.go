@@ -45,6 +45,7 @@ func CreateFood(c *gin.Context) {
   file, err := c.FormFile("image");
   
   if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "you must select one image"})
   }
 
 	uploadPath := getFilePath(file.Filename)

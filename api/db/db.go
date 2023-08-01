@@ -1,9 +1,9 @@
 package db
 
 import (
+	"github.com/anggakharisma/spice-republic/api/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"github.com/anggakharisma/spice-republic/api/models"
 )
 
 var DB *gorm.DB
