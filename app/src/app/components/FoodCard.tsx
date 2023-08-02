@@ -11,7 +11,7 @@ export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
     <div className="flex h-4/6 flex-col" onClick={() => addOrderItem(food)}>
       <div className="rounded-full max-h-64 hover:scale-110 transition-all hover:cursor-pointer">
         <Image
-          src={`http://localhost:3232/${food.image}` || `/images/food01.jpg`}
+          src={`${process.env.NEXT_PUBLIC_API_URL}images/${food.image}` || `/images/food01.jpg`}
           alt="desc"
           width="0"
           height="120"
