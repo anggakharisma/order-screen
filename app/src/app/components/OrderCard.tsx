@@ -10,7 +10,7 @@ export default function OrderCard({ orderItem }: OrderCardProps) {
     <div className="m-auto w-full relative h-full">
       <div className="rounded-full m-auto hover:cursor-pointer relative">
         <Image
-          src={`http://localhost:3232/${orderItem.food.image}` || `/images/food01.jpg`}
+          src={`${process.env.NEXT_PUBLIC_API_URL}${orderItem.food.image}` || `/images/food01.jpg`}
           alt="desc"
           width="0"
           height="0"
@@ -22,7 +22,7 @@ export default function OrderCard({ orderItem }: OrderCardProps) {
 
         <div className="flex text-black w-full m-auto my-8 justify-center mt-4">
           <button className="bg-yellow-300 px-2 py-2">-</button>
-          <input className="w-8 text-center mx-4 p-1 py-1 border-black" value={orderItem.amount} />
+          <input onChange={() => console.log("something")} className="w-8 text-center mx-4 p-1 py-1 border-black" value={orderItem.amount} />
           <button className="bg-yellow-300 px-2 py-2">+</button>
         </div>
       </div>

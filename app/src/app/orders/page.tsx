@@ -19,7 +19,7 @@ export default function Orders() {
     newOrderItems.map(item => {
       setTotalOrder(totalOrder + item.amount * item.food.price)
     })
-  }, [newOrderItems, totalOrder]);
+  }, [newOrderItems]);
 
   const addOrderItem = (food: Food) => {
     const hash = createHash("md5").update(String(food.ID) + food.name).digest("hex");
@@ -61,7 +61,7 @@ export default function Orders() {
   return (
     <div className="flex w-4/5 px-20 mb-24">
       <div className="self-start">
-        <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
+        <h1 className="text-3xl font-bold">Hello, Good Morning</h1>
         <h3>Order disini</h3>
         {
           isLoading && <h3>Loading</h3>
