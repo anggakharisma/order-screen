@@ -44,31 +44,30 @@ export default function Orders() {
       let orderItem: OrderItemRequest = {
         amount: newOrderItem.amount,
         food_id: newOrderItem.food.ID,
-        order_item_extras: newOrderItem.order_item_extras
+        order_item_extras: newOrderItem.order_item_extras || []
       }
 
       return orderItem;
     });
 
     const orders: OrderRequest = {
-      name: "some input",
+      name: "Robert",
       order_items: orderItems,
     };
 
-    //send to server
+    console.log(orders);
+
+    // TODO: send to server
   };
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
       <div className="self-start">
-        <h1 className="text-3xl font-bold">Hello, Good Morning</h1>
+        <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
         <h3>Order disini</h3>
         {
-          isLoading && <h3>Loading</h3>
-        }
-        {
-          data &&
-          <Foods data={data.data} addOrderItem={addOrderItem} isLoading={isLoading} />
+          isLoading ? <h3>Loading</h3> :
+            <Foods data={data!.data} addOrderItem={addOrderItem} isLoading={isLoading} />
         }
       </div>
       <div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
@@ -77,7 +76,7 @@ export default function Orders() {
           {
             newOrderItems.map((item, id) => <OrderCard key={id} orderItem={item} />)
           }
-          <button onClick={createOrder} className="text-3xl text-white bg-black">Order {totalOrder}</button>
+          <button onClick={createOrder} className="text-xl bg-red-800 text-white p-2">Total {totalOrder}</button>
         </div>
       </div>
     </div>

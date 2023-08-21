@@ -15,10 +15,10 @@ export default function OrderCard({ orderItem }: OrderCardProps) {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full h-40 max-h-full object-cover rounded-md hover:rounded-2xl transition-all"
+          className="w-full h-40 mb-4 max-h-full object-cover rounded-md hover:rounded-2xl transition-all"
         />
         <h3 className="text-black">{orderItem.food.name}</h3>
-        <h3 className="text-black">Rp {orderItem.food.price}</h3>
+        <h3 className="text-black">$ {orderItem.food.price}</h3>
 
         <div className="flex text-black w-full m-auto my-8 justify-center mt-4">
           <button className="bg-yellow-300 px-2 py-2">-</button>

@@ -19,9 +19,9 @@ export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
           className="w-full h-full object-cover rounded-md hover:rounded-2xl transition-all"
         />
       </div>
-      <div className="text-black bottom-10 bg-white -mt-6 z-40 rounded-full w-4/6 px-6 py-2 border-solid border-black border-[1px]">
+      <div className="text-black bottom-10 bg-white -mt-6 z-40 rounded-full w-5/6 px-6 py-2">
         <h1 className="text-xs">$ {food.price}</h1>
-        <h3 className="text-xs font-bold">{food.name}</h3>
+        <h3 className="text-sm">{food.name}</h3>
       </div>
     </div>
   )
