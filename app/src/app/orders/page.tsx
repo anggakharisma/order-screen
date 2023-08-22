@@ -12,13 +12,14 @@ type FoodQuery = {
 
 export default function Orders() {
   const { isLoading, error, data } = useQuery<FoodQuery>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
-  const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>([]);
+  const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "") || []);
   const [totalOrder, setTotalOrder] = useState<number>(0);
 
   useEffect(() => {
     newOrderItems.map(item => {
       setTotalOrder(totalOrder + item.amount * item.food.price)
     })
+    window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
   }, [newOrderItems]);
 
   const addOrderItem = (food: Food) => {
