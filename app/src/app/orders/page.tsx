@@ -1,6 +1,6 @@
 "use client";
 import { Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
@@ -40,26 +40,31 @@ export default function Orders() {
     }
   }
 
-  const createOrder = () => {
-    const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
-      let orderItem: OrderItemRequest = {
-        amount: newOrderItem.amount,
-        food_id: newOrderItem.food.ID,
-        order_item_extras: newOrderItem.order_item_extras || []
-      }
+  const orderMutation = useMutation({
+    mutationFn: () => {
+      const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
+        let orderItem: OrderItemRequest = {
+          amount: newOrderItem.amount,
+          food_id: newOrderItem.food.ID,
+          order_item_extras: newOrderItem.order_item_extras || []
+        }
 
-      return orderItem;
-    });
+        return orderItem;
+      });
 
-    const orders: OrderRequest = {
-      name: customerName,
-      order_items: orderItems,
-    };
-
-    console.log(orders);
-
-    // TODO: send to server
-  };
+      const orders: OrderRequest = {
+        name: "John",
+        order_items: orderItems,
+      };
+      return fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orders)
+      }).then(response => response.json())
+    }
+  });
 
   const changeQuantity = (actionType: string, orderItem: UserOrderItem) => {
     switch (actionType) {
@@ -104,7 +109,10 @@ export default function Orders() {
           {
             newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
-          <button onClick={createOrder} className="text-xl bg-red-800 text-white p-2">Total {totalOrder}</button>
+          <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
+          <button disabled={orderMutation.isLoading} onClick={() => {
+            orderMutation.mutate();
+          }} className="disabled:bg-gray-500 text-xl bg-red-800 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
         </div>
       </div>
     </div>
