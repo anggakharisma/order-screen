@@ -1,26 +1,15 @@
 package controllers
 
 import (
-	"mime/multipart"
 	"net/http"
 	"path/filepath"
 
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/models"
+	"github.com/anggakharisma/spice-republic/api/requests"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
-
-type FoodRequest struct {
-	Name  string               `form:"name" binding:"required"`
-	Price int                  `form:"price" binding:"required"`
-	Image multipart.FileHeader `form:"image" binding:"required"`
-}
-
-type UpdateFoodInput struct {
-	Name  string `json:"name"`
-	Price int    `json:"price"`
-}
 
 func FindFoods(c *gin.Context) {
 	var foods []models.Food
@@ -41,12 +30,12 @@ func FindFood(c *gin.Context) {
 }
 
 func CreateFood(c *gin.Context) {
-	var req FoodRequest
-  file, err := c.FormFile("image");
-  
-  if err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{"error": "Image is required"})
-  }
+	var req requests.FoodRequest
+	file, err := c.FormFile("image")
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image is required"})
+	}
 
 	uploadPath := getFilePath(file.Filename)
 
@@ -75,7 +64,7 @@ func UpdateFood(c *gin.Context) {
 		return
 	}
 
-	var updateFoodInput UpdateFoodInput
+	var updateFoodInput requests.UpdateFoodInput
 	if err := c.ShouldBindJSON(&updateFoodInput); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
