@@ -8,15 +8,16 @@ type FoodCardProps = {
 
 export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
   return (
-    <div className="flex h-4/6 flex-col" onClick={() => addOrderItem(food)}>
+    <div className="food-card flex min-w-full max-h-40 h-4/6 flex-col" onClick={() => addOrderItem(food)}>
       <div className="rounded-full max-h-64 hover:scale-110 transition-all hover:cursor-pointer">
         <Image
           src={`${process.env.NEXT_PUBLIC_API_URL}${food.image}` || `/images/food01.jpg`}
-          alt="desc"
+          alt={"Food name: " + addOrderItem.name}
           width="0"
-          height="120"
+          placeholder="empty"
+          height="0"
           sizes="100vw"
-          className="w-full h-full object-cover rounded-md hover:rounded-2xl transition-all"
+          className="w-full min-w-full h-40 max-h-40 object-cover rounded-md hover:rounded-2xl transition-all"
         />
       </div>
       <div className="text-black bottom-10 bg-white -mt-6 z-40 rounded-full w-5/6 px-6 py-2">

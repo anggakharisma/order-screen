@@ -3,6 +3,7 @@ import Logo from './components/logo'
 import './globals.css'
 import { Inter } from 'next/font/google'
 import ProvidesTheQueryClient from '@/Provider'
+import './styles/foodcard.css';
 
 const inter = Inter({ subsets: ['latin'] })
 

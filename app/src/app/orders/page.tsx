@@ -6,19 +6,19 @@ import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
 
-type FoodQuery = {
-  data: Food[]
-}
-
 export default function Orders() {
-  const { isLoading, error, data } = useQuery<FoodQuery>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
-  const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "") || []);
+  const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
+  const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
+  const [customerName, setCustomerName] = useState<string>("");
   const [totalOrder, setTotalOrder] = useState<number>(0);
 
   useEffect(() => {
+    let currentTotal = 0;
     newOrderItems.map(item => {
-      setTotalOrder(totalOrder + item.amount * item.food.price)
-    })
+      currentTotal += item.amount * item.food.price;
+    });
+    setTotalOrder(currentTotal);
+
     window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
   }, [newOrderItems]);
 
@@ -52,7 +52,7 @@ export default function Orders() {
     });
 
     const orders: OrderRequest = {
-      name: "Robert",
+      name: customerName,
       order_items: orderItems,
     };
 
@@ -61,10 +61,37 @@ export default function Orders() {
     // TODO: send to server
   };
 
+  const changeQuantity = (actionType: string, orderItem: UserOrderItem) => {
+    switch (actionType) {
+      case "DECREASE": {
+        if (orderItem.amount <= 1) {
+          const orderItems = newOrderItems.filter(item => item.hash != orderItem.hash);
+          setNewOrderItems(orderItems);
+          return;
+        }
+        const orderItems = newOrderItems.map(item => item.hash === orderItem.hash ? { ...item, amount: --item.amount } : item);
+        setNewOrderItems(orderItems);
+        break;
+      }
+      case "INCREASE": {
+        const orderItems = newOrderItems.map(item => item.hash === orderItem.hash ? { ...item, amount: ++item.amount } : item);
+        setNewOrderItems(orderItems);
+        break;
+      }
+    }
+  }
+
+  const currentHoursGreeting = (): string => {
+    const currentHours = new Date().getHours();
+    if (currentHours < 12) return "Pagi";
+    else if (currentHours < 17 && currentHours >= 12) return "Siang"
+    return "Malam";
+  }
+
   return (
     <div className="flex w-4/5 px-20 mb-24">
       <div className="self-start">
-        <h1 className="text-3xl font-bold">Halo, Selamat Pagi</h1>
+        <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
         <h3>Order disini</h3>
         {
           isLoading ? <h3>Loading</h3> :
@@ -75,7 +102,7 @@ export default function Orders() {
         <p className="mb-6 font-semibold text-black">Order anda</p>
         <div className="px-4">
           {
-            newOrderItems.map((item, id) => <OrderCard key={id} orderItem={item} />)
+            newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
           <button onClick={createOrder} className="text-xl bg-red-800 text-white p-2">Total {totalOrder}</button>
         </div>
