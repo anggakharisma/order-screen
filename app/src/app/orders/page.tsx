@@ -1,5 +1,5 @@
 "use client";
-import { Food, Order, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
+import { Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createHash } from "crypto";
