@@ -5,18 +5,7 @@ import { useEffect, useState } from "react";
 import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
-
-const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: React.ReactNode, isVisible: boolean, okFunction: () => void, cancelFunction: () => void }) => {
-  return (
-    <div className={`${isVisible ? "block" : "hidden"} z-50 border-black border-2 block rounded-xl bg-white fixed top-1/2 left-1/2 -translate-x-1/2 py-4 px-8`}>
-      {children}
-      <div className="flex justify-center gap-8 mt-2">
-        <button onClick={okFunction} className="bg-green-500 p-6 rounded-lg py-1">yes</button>
-        <button onClick={cancelFunction} className="bg-red-500 p-6 rounded-lg py-1">No</button>
-      </div>
-    </div>
-  )
-}
+import Modal from "../components/Modal";
 
 export default function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
@@ -113,7 +102,7 @@ export default function Orders() {
         addOrderItem(currentFood!)
         setShowPrompt(false);
       }} cancelFunction={() => setShowPrompt(false)}>
-        <h2 className="text-xl tracking-tighter text-black">are you sure want to add this menu ?</h2>
+        <h2 className="text-2xl tracking-tighter text-black">Yakin untuk tambah menu ?</h2>
       </Modal>
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
@@ -121,6 +110,7 @@ export default function Orders() {
         {
           isLoading ? <h3>Loading</h3> :
             <Foods data={data!.data} setCurrent={(food) => {
+              if (showPrompot) return;
               setShowPrompt(true);
               setCurrentFood(food);
             }} isLoading={isLoading} />
