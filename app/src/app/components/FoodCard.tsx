@@ -3,16 +3,17 @@ import Image from "next/image";
 
 type FoodCardProps = {
   food: Food;
-  addOrderItem: (food: Food) => void
+  setCurrent: (food: Food) => void
 }
 
-export default function FoodCard({ food, addOrderItem }: FoodCardProps) {
+export default function FoodCard({ food, setCurrent }: FoodCardProps) {
+
   return (
-    <div className="food-card flex min-w-full max-h-40 h-4/6 flex-col" onClick={() => addOrderItem(food)}>
+    <div className="food-card flex min-w-full max-h-40 h-4/6 flex-col" onClick={() => setCurrent(food)}>
       <div className="rounded-full max-h-64 hover:scale-110 transition-all ease-linear hover:cursor-pointer">
         <Image
           src={`${process.env.NEXT_PUBLIC_API_URL}${food.image}` || `/images/food01.jpg`}
-          alt={"Food name: " + addOrderItem.name}
+          alt={"Food name: " + food.name}
           width="0"
           placeholder="empty"
           height="0"

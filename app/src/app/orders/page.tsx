@@ -6,10 +6,24 @@ import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
 
+const Modal = ({ isVisible, okFunction, cancelFunction }: { isVisible: boolean, okFunction: any, cancelFunction: any }) => {
+  return (
+    <div className={`${isVisible ? "block" : "hidden"} block rounded-xl bg-white absolute top-10 left-1/2 -translate-x-1/2 py-4 px-8`}>
+      <h2 className="text-xl tracking-tighter text-black">are you sure want to add this menu ?</h2>
+      <div className="flex justify-center gap-8 mt-2">
+        <button onClick={okFunction} className="bg-green-500 p-6 rounded-lg py-1">yes</button>
+        <button onClick={cancelFunction} className="bg-red-500 p-6 rounded-lg py-1">No</button>
+      </div>
+    </div>
+  )
+}
+
 export default function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
   const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
   const [customerName, setCustomerName] = useState<string>("");
+  const [showPrompot, setShowPrompt] = useState(false);
+  const [currentFood, setCurrentFood] = useState<Food>();
   const [totalOrder, setTotalOrder] = useState<number>(0);
 
   useEffect(() => {
@@ -41,7 +55,7 @@ export default function Orders() {
   }
 
   const orderMutation = useMutation({
-    mutationFn: () => {
+    mutationFn: async () => {
       const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
         let orderItem: OrderItemRequest = {
           amount: newOrderItem.amount,
@@ -95,12 +109,19 @@ export default function Orders() {
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
+      <Modal isVisible={showPrompot} okFunction={() => {
+        addOrderItem(currentFood!)
+        setShowPrompt(false);
+      }} cancelFunction={() => setShowPrompt(false)} />
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
         <h3>Order disini</h3>
         {
           isLoading ? <h3>Loading</h3> :
-            <Foods data={data!.data} addOrderItem={addOrderItem} isLoading={isLoading} />
+            <Foods data={data!.data} setCurrent={(food) => {
+              setShowPrompt(true);
+              setCurrentFood(food);
+            }} isLoading={isLoading} />
         }
       </div>
       <div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
@@ -110,9 +131,11 @@ export default function Orders() {
             newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
           <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
-          <button disabled={orderMutation.isLoading} onClick={() => {
-            orderMutation.mutate();
-          }} className="disabled:bg-gray-500 text-xl bg-red-800 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
+          {totalOrder > 0 ?
+            <button disabled={orderMutation.isLoading} onClick={() => {
+              orderMutation.mutate();
+            }} className="disabled:bg-gray-500 text-xl bg-red-800 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
+            : ""}
         </div>
       </div>
     </div>
