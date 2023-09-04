@@ -16,28 +16,6 @@ type UpdateOrderInput struct {
 	OrderStatus uint   `json:"order_status"`
 }
 
-func convertOrderItemRequest(orderRequest *requests.OrderRequest) []models.OrderItem {
-	var orderItems []models.OrderItem
-	for _, orderItemReq := range orderRequest.OrderItems {
-		var orderItemExtras []models.OrderItemExtra
-
-		for _, orderItemExtraReq := range orderItemReq.OrderItemExtras {
-			orderItemExtras = append(orderItemExtras, models.OrderItemExtra{
-				Amount:  orderItemExtraReq.Amount,
-				ExtraId: orderItemExtraReq.ExtraId,
-			})
-		}
-
-		orderItems = append(orderItems, models.OrderItem{
-			Amount:          orderItemReq.Amount,
-			FoodId:          orderItemReq.FoodId,
-			OrderItemExtras: orderItemExtras,
-		})
-	}
-
-	return orderItems
-}
-
 func FindOrders(c *gin.Context) {
 	var orders []models.Order
 	db.DB.Find(&orders)
@@ -74,7 +52,7 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	orderItems := convertOrderItemRequest(&orderRequest)
+	orderItems := requests.ConvertOrderItemRequest(orderRequest)
 	order := models.Order{Name: orderRequest.Name, OrderType: 0, OrderStatus: 0, OrderItems: orderItems}
 	db.DB.Create(&order)
 

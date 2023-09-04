@@ -46,7 +46,7 @@ func main() {
 
 	v1 := r.Group("/v1/", middlewares.TokenAuthMiddleware())
 
-	foodsRoute := v1.Group("/foods")
+	foodsRoute := v1.Group("/foods", middlewares.TokenAuthMiddleware())
 	{
 		foodsRoute.GET("/", controllers.FindFoods)
 		foodsRoute.GET("/:id", controllers.FindFood)
