@@ -6,10 +6,10 @@ import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
 
-const Modal = ({ isVisible, okFunction, cancelFunction }: { isVisible: boolean, okFunction: any, cancelFunction: any }) => {
+const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: React.ReactNode, isVisible: boolean, okFunction: () => void, cancelFunction: () => void }) => {
   return (
-    <div className={`${isVisible ? "block" : "hidden"} block rounded-xl bg-white absolute top-10 left-1/2 -translate-x-1/2 py-4 px-8`}>
-      <h2 className="text-xl tracking-tighter text-black">are you sure want to add this menu ?</h2>
+    <div className={`${isVisible ? "block" : "hidden"} z-50 border-black border-2 block rounded-xl bg-white fixed top-1/2 left-1/2 -translate-x-1/2 py-4 px-8`}>
+      {children}
       <div className="flex justify-center gap-8 mt-2">
         <button onClick={okFunction} className="bg-green-500 p-6 rounded-lg py-1">yes</button>
         <button onClick={cancelFunction} className="bg-red-500 p-6 rounded-lg py-1">No</button>
@@ -112,7 +112,9 @@ export default function Orders() {
       <Modal isVisible={showPrompot} okFunction={() => {
         addOrderItem(currentFood!)
         setShowPrompt(false);
-      }} cancelFunction={() => setShowPrompt(false)} />
+      }} cancelFunction={() => setShowPrompt(false)}>
+        <h2 className="text-xl tracking-tighter text-black">are you sure want to add this menu ?</h2>
+      </Modal>
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
         <h3>Order disini</h3>
