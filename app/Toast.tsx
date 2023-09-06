@@ -1,6 +1,6 @@
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
-const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: React.ReactNode, isVisible: boolean, okFunction: () => void, cancelFunction: () => void }) => {
+const Toast = ({ children, isVisible, okFunction, cancelFunction }: { children: React.ReactNode, isVisible: boolean, okFunction: () => void, cancelFunction: () => void }) => {
   return (
     <div className={`${isVisible ? "block" : "hidden"} z-50 border-gray-100 border-[1px] border-black block rounded-lg bg-white fixed top-1/4 left-[40%] -translate-x-1/2 py-4 px-8`}>
       {children}
@@ -13,4 +13,4 @@ const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: 
 }
 
 
-export default Modal
+export default Toast

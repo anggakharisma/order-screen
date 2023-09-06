@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
-import Modal from "../components/Modal";
+import Toast from "../components/Toast";
 
 export default function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
@@ -98,12 +98,12 @@ export default function Orders() {
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
-      <Modal isVisible={showPrompot} okFunction={() => {
+      <Toast isVisible={showPrompot} okFunction={() => {
         addOrderItem(currentFood!)
         setShowPrompt(false);
       }} cancelFunction={() => setShowPrompt(false)}>
         <h2 className="text-2xl tracking-tighter text-black">Yakin untuk tambah menu ?</h2>
-      </Modal>
+      </Toast>
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
         <h3>Order disini</h3>
