@@ -102,7 +102,7 @@ export default function Orders() {
         addOrderItem(currentFood!)
         setShowPrompt(false);
       }} cancelFunction={() => setShowPrompt(false)}>
-        <h2 className="text-2xl tracking-tighter text-black">Yakin untuk tambah menu ?</h2>
+        <h2 className="text-2xl mb-4 tracking-tighter text-black text-center">Tambah menu ini ?</h2>
       </Toast>
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
@@ -123,11 +123,9 @@ export default function Orders() {
             newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
           <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
-          {totalOrder > 0 ?
-            <button disabled={orderMutation.isLoading} onClick={() => {
-              orderMutation.mutate();
-            }} className="disabled:bg-gray-500 text-xl bg-red-800 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
-            : ""}
+          <button disabled={orderMutation.isLoading} onClick={() => {
+            orderMutation.mutate();
+          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
         </div>
       </div>
     </div>
