@@ -4,6 +4,7 @@ import './globals.css'
 import { Inter } from 'next/font/google'
 import ProvidesTheQueryClient from '@/Provider'
 import './styles/foodcard.css';
+import Modal from './components/Modal'
 
 const inter = Inter({ subsets: ['latin'] })
 

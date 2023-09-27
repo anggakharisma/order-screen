@@ -6,8 +6,9 @@ import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
 import Toast from "../components/Toast";
+import { idrCurrency } from "@/config/currency";
 
-export default function Orders() {
+function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
   const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
   const [customerName, setCustomerName] = useState<string>("");
@@ -59,6 +60,7 @@ export default function Orders() {
         name: "John",
         order_items: orderItems,
       };
+
       return fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
         method: "POST",
         headers: {
@@ -123,11 +125,16 @@ export default function Orders() {
             newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
           <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
-          <button disabled={orderMutation.isLoading} onClick={() => {
+          {newOrderItems.length > 0 && <button disabled={orderMutation.isLoading} onClick={() => {
+            setNewOrderItems([]);
+            window.localStorage.removeItem("newOrderItems");
+
             orderMutation.mutate();
-          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + totalOrder}</button>
+          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + idrCurrency.format(totalOrder)}</button>}
         </div>
       </div>
     </div>
   )
 }
+
+export default Orders;

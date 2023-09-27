@@ -13,4 +13,4 @@ const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: 
 }
 
 
-export default Modal
+export default Modal;
