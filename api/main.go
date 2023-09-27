@@ -40,13 +40,15 @@ func main() {
 	}
 	r := gin.Default()
 	r.Use(CORS())
+	r.RedirectTrailingSlash = false
+	r.RedirectFixedPath = true
 
 	r.Static("/images", "./images")
 	r.GET("/health", controllers.HealthCheck)
 
 	v1 := r.Group("/v1/", middlewares.TokenAuthMiddleware())
 
-	foodsRoute := v1.Group("/foods")
+	foodsRoute := v1.Group("/foods", middlewares.TokenAuthMiddleware())
 	{
 		foodsRoute.GET("/", controllers.FindFoods)
 		foodsRoute.GET("/:id", controllers.FindFood)

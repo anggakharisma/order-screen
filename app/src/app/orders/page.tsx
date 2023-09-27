@@ -1,15 +1,19 @@
 "use client";
-import { Food, Order, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
-import { useQuery } from "@tanstack/react-query";
+import { Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
+import Toast from "../components/Toast";
+import { idrCurrency } from "@/config/currency";
 
-export default function Orders() {
+function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
   const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
   const [customerName, setCustomerName] = useState<string>("");
+  const [showPrompot, setShowPrompt] = useState(false);
+  const [currentFood, setCurrentFood] = useState<Food>();
   const [totalOrder, setTotalOrder] = useState<number>(0);
 
   useEffect(() => {
@@ -40,26 +44,32 @@ export default function Orders() {
     }
   }
 
-  const createOrder = () => {
-    const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
-      let orderItem: OrderItemRequest = {
-        amount: newOrderItem.amount,
-        food_id: newOrderItem.food.ID,
-        order_item_extras: newOrderItem.order_item_extras || []
-      }
+  const orderMutation = useMutation({
+    mutationFn: async () => {
+      const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
+        let orderItem: OrderItemRequest = {
+          amount: newOrderItem.amount,
+          food_id: newOrderItem.food.ID,
+          order_item_extras: newOrderItem.order_item_extras || []
+        }
 
-      return orderItem;
-    });
+        return orderItem;
+      });
 
-    const orders: OrderRequest = {
-      name: customerName,
-      order_items: orderItems,
-    };
+      const orders: OrderRequest = {
+        name: "John",
+        order_items: orderItems,
+      };
 
-    console.log(orders);
-
-    // TODO: send to server
-  };
+      return fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orders)
+      }).then(response => response.json())
+    }
+  });
 
   const changeQuantity = (actionType: string, orderItem: UserOrderItem) => {
     switch (actionType) {
@@ -90,12 +100,22 @@ export default function Orders() {
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
+      <Toast isVisible={showPrompot} okFunction={() => {
+        addOrderItem(currentFood!)
+        setShowPrompt(false);
+      }} cancelFunction={() => setShowPrompt(false)}>
+        <h2 className="text-2xl mb-4 tracking-tighter text-black text-center">Tambah menu ini ?</h2>
+      </Toast>
       <div className="self-start">
         <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
         <h3>Order disini</h3>
         {
           isLoading ? <h3>Loading</h3> :
-            <Foods data={data!.data} addOrderItem={addOrderItem} isLoading={isLoading} />
+            <Foods data={data!.data} setCurrent={(food) => {
+              if (showPrompot) return;
+              setShowPrompt(true);
+              setCurrentFood(food);
+            }} isLoading={isLoading} />
         }
       </div>
       <div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
@@ -104,9 +124,17 @@ export default function Orders() {
           {
             newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
-          <button onClick={createOrder} className="text-xl bg-red-800 text-white p-2">Total {totalOrder}</button>
+          <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
+          {newOrderItems.length > 0 && <button disabled={orderMutation.isLoading} onClick={() => {
+            setNewOrderItems([]);
+            window.localStorage.removeItem("newOrderItems");
+
+            orderMutation.mutate();
+          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + idrCurrency.format(totalOrder)}</button>}
         </div>
       </div>
     </div>
   )
 }
+
+export default Orders;

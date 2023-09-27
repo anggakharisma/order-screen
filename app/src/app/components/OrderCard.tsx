@@ -1,3 +1,4 @@
+import { idrCurrency } from "@/config/currency";
 import { UserOrderItem } from "@/type";
 import Image from "next/image";
 
@@ -19,12 +20,12 @@ export default function OrderCard({ orderItem, changeQuantity }: OrderCardProps)
           className="w-full h-40 mb-2 max-h-full object-cover rounded-md hover:rounded-2xl transition-all"
         />
         <h3 className="text-black">{orderItem.food.name}</h3>
-        <h3 className="text-black">$ {orderItem.food.price}</h3>
+        <h3 className="text-black">{idrCurrency.format(orderItem.food.price)}</h3>
 
         <div className="flex text-black w-full m-auto my-8 justify-center mt-4">
-          <button onClick={() => changeQuantity("DECREASE", orderItem)} className="bg-yellow-300 px-2 py-2">-</button>
-          <input onChange={() => console.log("something")} className="w-8 text-center mx-4 p-1 py-1 border-black" value={orderItem.amount} />
-          <button onClick={() => changeQuantity("INCREASE", orderItem)} className="bg-yellow-300 px-2 py-2">+</button>
+          <button onClick={() => changeQuantity("DECREASE", orderItem)} className="bg-red-600 text-white px-2">-</button>
+          <input disabled className="w-8 text-center mx-2 p-1 py-1 border-gray-200 border-[1px]" value={orderItem.amount} />
+          <button onClick={() => changeQuantity("INCREASE", orderItem)} className="bg-red-600 text-white px-2">+</button>
         </div>
       </div>
     </div>
