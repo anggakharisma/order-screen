@@ -40,6 +40,8 @@ func main() {
 	}
 	r := gin.Default()
 	r.Use(CORS())
+	r.RedirectTrailingSlash = false
+	r.RedirectFixedPath = true
 
 	r.Static("/images", "./images")
 	r.GET("/health", controllers.HealthCheck)
