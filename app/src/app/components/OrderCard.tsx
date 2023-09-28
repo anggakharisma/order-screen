@@ -20,7 +20,7 @@ export default function OrderCard({ orderItem, changeQuantity }: OrderCardProps)
           className="w-full h-40 mb-2 max-h-full object-cover rounded-md hover:rounded-2xl transition-all"
         />
         <h3 className="text-black">{orderItem.food.name}</h3>
-        <h3 className="text-black">{idrCurrency.format(orderItem.food.price)}</h3>
+        <h3 className="text-black">{idrCurrency.format(orderItem.food.price).replace(/(\.|,)00$/g, '')}</h3>
 
         <div className="flex text-black w-full m-auto my-8 justify-center mt-4">
           <button onClick={() => changeQuantity("DECREASE", orderItem)} className="bg-red-600 text-white px-2">-</button>

@@ -10,7 +10,7 @@ type FoodsProps = {
 export default function Foods({ isLoading, data, setCurrent }: FoodsProps) {
 	return (
 		!isLoading ?
-			<div className="flex justify-around gap-12 mt-8">
+			<div className="flex gap-y-20 flex-wrap gap-12 mt-8">
 				<Fade cascade delay={2} damping={0.15}>
 					{
 						data.map((food: Food) => <FoodCard setCurrent={setCurrent} food={food} key={food.ID}></FoodCard>)

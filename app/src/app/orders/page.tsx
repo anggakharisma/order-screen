@@ -130,7 +130,7 @@ function Orders() {
             window.localStorage.removeItem("newOrderItems");
 
             orderMutation.mutate();
-          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + idrCurrency.format(totalOrder)}</button>}
+          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + idrCurrency.format(totalOrder).replace(/(\.|,)00$/g, '')}</button>}
         </div>
       </div>
     </div>
