@@ -1,12 +1,13 @@
 "use client";
 import { Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createHash } from "crypto";
 import Foods from "../components/Orders/Foods";
 import OrderCard from "../components/OrderCard";
 import Toast from "../components/Toast";
-import { idrCurrency } from "@/config/currency";
+import Modal from "../components/Modal";
+import { useOnClickOutside } from 'usehooks-ts';
 
 function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
@@ -15,6 +16,16 @@ function Orders() {
   const [showPrompot, setShowPrompt] = useState(false);
   const [currentFood, setCurrentFood] = useState<Food>();
   const [totalOrder, setTotalOrder] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    console.log("Clicked")
+  }
+
+  useOnClickOutside(modalRef, closeModal);
+
 
   useEffect(() => {
     let currentTotal = 0;
@@ -24,7 +35,7 @@ function Orders() {
     setTotalOrder(currentTotal);
 
     window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
-  }, [newOrderItems]);
+  }, [newOrderItems, modalRef]);
 
   const addOrderItem = (food: Food) => {
     const hash = createHash("md5").update(String(food.ID) + food.name).digest("hex");
@@ -42,6 +53,10 @@ function Orders() {
       const orderItems = newOrderItems.map(orderItem => orderItem.hash === hash ? { ...orderItem, amount: orderItem.amount += 1 } : orderItem);
       setNewOrderItems(orderItems);
     }
+  }
+
+  const removeOrder = (hash: string) => {
+    setNewOrderItems(newOrderItems.filter(item => item.hash != hash));
   }
 
   const orderMutation = useMutation({
@@ -100,6 +115,11 @@ function Orders() {
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
+      {isModalOpen &&
+        <Modal ref={modalRef}>
+          <input className="" type="text" />
+        </Modal>
+      }
       <Toast isVisible={showPrompot} okFunction={() => {
         addOrderItem(currentFood!)
         setShowPrompt(false);
@@ -120,17 +140,10 @@ function Orders() {
       </div>
       <div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
         <p className="mb-6 font-semibold text-black">Order anda</p>
-        <div className="px-4">
+        <div className="px-2">
           {
-            newOrderItems.map((item, id) => <OrderCard changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
+            newOrderItems.map((item, id) => <OrderCard removeOrder={removeOrder} changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
           }
-          <p className="text-black">{orderMutation.isSuccess ? orderMutation.data['data'] : " "}</p>
-          {newOrderItems.length > 0 && <button disabled={orderMutation.isLoading} onClick={() => {
-            setNewOrderItems([]);
-            window.localStorage.removeItem("newOrderItems");
-
-            orderMutation.mutate();
-          }} className="disabled:bg-gray-500 text-xl bg-red-600 text-white p-2">{orderMutation.isLoading ? "Loading" : "Total " + idrCurrency.format(totalOrder)}</button>}
         </div>
       </div>
     </div>
