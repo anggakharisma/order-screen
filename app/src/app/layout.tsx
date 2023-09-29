@@ -13,7 +13,7 @@ export const metadata = {
   description: 'Spice Republic',
 }
 
-const bodyClass = inter.className + " dark:bg-stone-950 bg-white text-white dark:text-white min-h-screen"
+const bodyClass = inter.className + " dark:bg-black bg-white text-white dark:text-white min-h-screen"
 
 export default function RootLayout({
   children,
