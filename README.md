@@ -79,7 +79,7 @@ To start the Spice Republic application, follow these steps:
    ```
 
    This will start the api server.
-   Check app README.md for more information, like docker usage
+   Check api README.md for more information, like docker usage
 
 3. Open your browser and visit `http://localhost:3000` to access Spice Republic.
 
