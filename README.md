@@ -14,8 +14,23 @@ Spice Republic is a comprehensive order screen application designed specifically
 - **SQLite and Go:** The backend of Spice Republic utilizes SQLite as the database management system and Go as the programming language, ensuring a robust and efficient server-side implementation.
 - **Docker support:** The project supports Docker, allowing for easy deployment and containerization of the application.
 
-## 🛠️ Installation
 
+## ⚙️ Configuration
+
+you need to configure a few settings:
+
+1. Create a `.env` file in the `app` directory, `cp .env.example .env` and specify the following environment variables:
+
+   ```
+   NEXT_PUBLIC_API_URL=http://localhost:8080/api
+   ```
+2. Create a `.env` file in the `api` directory, `cp .env.example.env` and specify the following environment variables:
+
+   ```
+   API_TOKEN=http://localhost:8080/api
+   ```
+
+## 🛠️ Installation
 To set up Spice Republic locally, follow these steps:
 
 1. Clone the repository:
@@ -40,24 +55,9 @@ To set up Spice Republic locally, follow these steps:
 4. Install the dependencies for the backend:
 
    ```
-   cd app
+   cd api
    go mod download
    ```
-
-## ⚙️ Configuration
-
-Before running the application, you need to configure a few settings:
-
-1. Create a `.env` file in the `app` directory and specify the following environment variables:
-
-   ```
-   NEXT_PUBLIC_API_URL=http://localhost:8080/api
-   NEXT_PUBLIC_API_TOKEN=v.UGXrV='!xIBDK=)K^bN0mE_fb9_Jy5W3u3WJZ199A+<+pAx}!]%b2B?y5{3{h
-   ```
-2. Create a `.env` file in the `api` directory and specify the following environment variables:
-
-   ```
-   cp .env.example .env
 
 ## 🚀 Usage
 
