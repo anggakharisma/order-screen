@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -34,7 +35,9 @@ func CreateFood(c *gin.Context) {
 	file, err := c.FormFile("image")
 
 	if err != nil {
+		fmt.Println(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Image is required"})
+		return
 	}
 
 	uploadPath := getFilePath(file.Filename)

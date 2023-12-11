@@ -39,7 +39,7 @@ func main() {
 		}
 	}
 	r := gin.Default()
-	r.Use(CORS())
+	//r.Use(CORS())
 	r.RedirectTrailingSlash = false
 	r.RedirectFixedPath = true
 
