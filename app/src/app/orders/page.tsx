@@ -1,22 +1,22 @@
 "use client";
 import { Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
 import { createHash } from "crypto";
-import Foods from "../components/Orders/Foods";
-import OrderCard from "../components/OrderCard";
-import Toast from "../components/Toast";
-import Modal from "../components/Modal";
+import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from 'usehooks-ts';
+import Modal from "../components/Modal";
+import OrderCard from "../components/OrderCard";
+import Foods from "../components/Orders/Foods";
+import Toast from "../components/Toast";
 
 function Orders() {
   const { isLoading, error, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
   const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
   const [customerName, setCustomerName] = useState<string>("");
-  const [showPrompot, setShowPrompt] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
   const [currentFood, setCurrentFood] = useState<Food>();
   const [totalOrder, setTotalOrder] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
   const modalRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const closeModal = () => {
@@ -108,38 +108,38 @@ function Orders() {
 
   const currentHoursGreeting = (): string => {
     const currentHours = new Date().getHours();
-    if (currentHours < 12) return "Pagi";
-    else if (currentHours < 17 && currentHours >= 12) return "Siang"
-    return "Malam";
+    if (currentHours < 12) return "Morning";
+    else if (currentHours < 17 && currentHours >= 12) return "Afteernoon"
+    return "Afternoon";
   }
 
   return (
     <div className="flex w-4/5 px-20 mb-24">
-      {isModalOpen &&
-        <Modal ref={modalRef}>
-          <input className="" type="text" />
-        </Modal>
-      }
-      <Toast isVisible={showPrompot} okFunction={() => {
+	<Modal showModal={isModalOpen} ref={modalRef}>
+		<h1 className="text-xl text-black font-bold">Confirm your order</h1>
+		<p className="dark:text-black">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa nesciunt deserunt laborum dolorum sit facilis libero eos quasi porro! Nobis inventore quia soluta non dignissimos illo dolores, facere voluptatem id?</p>
+	</Modal>
+
+      <Toast isVisible={showPrompt} okFunction={() => {
         addOrderItem(currentFood!)
         setShowPrompt(false);
       }} cancelFunction={() => setShowPrompt(false)}>
-        <h2 className="text-2xl mb-4 tracking-tighter text-black text-center">Tambah menu ini ?</h2>
+        <h2 className="text-2xl mb-4 tracking-tighter text-black text-center">Add this item?</h2>
       </Toast>
       <div className="self-start">
-        <h1 className="text-3xl font-bold">Halo, Selamat {currentHoursGreeting()}</h1>
-        <h3>Order disini</h3>
+        <h1 className="text-3xl font-bold">Hello, Good {currentHoursGreeting()}</h1>
+        <h3>Order Here</h3>
         {
           isLoading ? <h3>Loading</h3> :
             <Foods data={data!.data} setCurrent={(food) => {
-              if (showPrompot) return;
+              if (showPrompt) return;
               setShowPrompt(true);
               setCurrentFood(food);
             }} isLoading={isLoading} />
         }
       </div>
       <div id="order" className="bg-white w-[22vw] h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
-        <p className="mb-6 font-semibold text-black">Order anda</p>
+        <p className="mb-6 font-semibold text-black">Your Order</p>
         <div className="px-2">
           {
             newOrderItems.map((item, id) => <OrderCard removeOrder={removeOrder} changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
