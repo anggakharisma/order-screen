@@ -38,7 +38,7 @@ export interface Order {
 }
 
 export interface OrderRequest extends Order {
-	order_items: OrderItemRequest[]
+  order_items: OrderItemRequest[]
 }
 
 export type OrderItemExtraRequest = Omit<OrderItemExtras, "ID">;
@@ -49,3 +49,5 @@ export interface UserOrderItem {
   food: Food;
   order_item_extras?: OrderItemExtraRequest[];
 }
+
+export type ChangeQuantity = (actionType: string, orderItem: UserOrderItem) => void;

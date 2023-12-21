@@ -1,10 +1,10 @@
 import { idrCurrency, usdCurrency } from "@/config/currency";
-import { UserOrderItem } from "@/type";
+import { UserOrderItem, ChangeQuantity } from "@/type";
 import Image from "next/image";
 
 type OrderCardProps = {
-  orderItem: UserOrderItem
-  changeQuantity: (actionType: string, orderItem: UserOrderItem) => void
+  orderItem: UserOrderItem,
+  changeQuantity: ChangeQuantity,
   removeOrder: (hash: string) => void
 }
 
