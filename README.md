@@ -4,6 +4,8 @@
   <img src="app/public/images/logo.svg" alt="Spice Republic Logo">
 </p>
 
+<img src="./preview2.jpg">
+
 Spice Republic is a comprehensive order screen application designed specifically for restaurants. It provides a user-friendly interface for managing orders efficiently and effectively. This repository contains the source code for both the frontend and backend of the application, which are built using Next.js, Tailwind CSS, SQLite, and Go. The project also includes Docker support for easy containerization.
 
 ## 🚀 Features
