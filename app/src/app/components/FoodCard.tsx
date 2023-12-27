@@ -1,4 +1,4 @@
-import { idrCurrency } from "@/config/currency";
+import { usdCurrency } from "@/config/currency";
 import { Food } from "@/type";
 import Image from "next/image";
 
@@ -18,12 +18,12 @@ export default function FoodCard({ food, setCurrent }: FoodCardProps) {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-48 min-w-full h-52 object-cover rounded-md hover:rounded-2xl transition-all"
+          className="w-48 min-w-full h-52 object-cover object-top rounded-md hover:rounded-2xl transition-all"
         />
       </div>
       <div className="text-black bg-white -mt-8 z-10 rounded-full w-10/12 px-6 py-2">
         <h3 className="text-sm track-wider font-bold">{food.name}</h3>
-        <h1 className="text-xs">{idrCurrency.format(food.price).replace(/(\.|,)00$/g, '')}</h1>
+        <h1 className="text-xs">{usdCurrency.format(food.price).replace(/(\.|,)00$/g, '')}</h1>
       </div>
     </div>
   )

@@ -8,6 +8,7 @@ import Modal from "../components/Modal";
 import Foods from "../components/Orders/Foods";
 import UserOrder from "../components/Orders/UserOrder";
 import Toast from "../components/Toast";
+import { usdCurrency } from "@/config/currency";
 
 function Orders() {
   const { isLoading, data } = useQuery<{ data: Food[] }>(["foods"], () => fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json()));
@@ -21,7 +22,6 @@ function Orders() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    console.log("Clicked")
   }
 
   useOnClickOutside(modalRef, closeModal);
@@ -32,6 +32,7 @@ function Orders() {
       currentTotal += item.amount * item.food.price;
     });
     setTotalOrder(currentTotal);
+
 
     window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
   }, [newOrderItems, modalRef]);
@@ -114,7 +115,7 @@ function Orders() {
   }
 
   return (
-    <div className="flex w-4/5 px-20 mb-24">
+    <div className="w-4/5 px-20 mb-24">
       <Modal showModal={isModalOpen} ref={modalRef}>
         <h1 className="text-xl text-black font-bold">Confirm your order</h1>
         <p className="dark:text-black">Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa nesciunt deserunt laborum dolorum sit facilis libero eos quasi porro! Nobis inventore quia soluta non dignissimos illo dolores, facere voluptatem id?</p>
@@ -123,13 +124,13 @@ function Orders() {
       <Toast
         isVisible={showPrompt}
         okFunction={() => {
-          addOrderItem(currentFood!)
+          addOrderItem(currentFood!);
           setShowPrompt(false);
         }}
         cancelFunction={() => setShowPrompt(false)}>
         <h2 className="text-2xl mb-4 tracking-tighter text-black text-center">Add this item?</h2>
       </Toast>
-      <div className="self-start">
+      <div className="w-full">
         <h1 className="text-3xl font-bold">Hello, Good {currentHoursGreeting()}</h1>
         <h3>Order Here</h3>
         {
@@ -141,7 +142,16 @@ function Orders() {
             }} isLoading={isLoading} />
         }
       </div>
-      <UserOrder removeOrder={removeOrder} changeQuantity={changeQuantity} newOrderItems={newOrderItems} />
+      <div className="bg-white w-64 h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
+        <UserOrder removeOrder={removeOrder} changeQuantity={changeQuantity} newOrderItems={newOrderItems} />
+        <button className="bg-red-500 px-4 py-2 rounded-full fixed bottom-4 right-16 text-white text-center text-md">Total: {usdCurrency.format(totalOrder)}</button>
+      </div>
+      <div className="flex justify-around w-full bg-red-900">
+        <div>
+        </div>
+        <div>
+        </div>
+      </div>
     </div>
   )
 }

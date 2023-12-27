@@ -21,9 +21,9 @@ air
 ### you can use docker for development if you want
 ```
 cp .env.example .env
-docker build -t spice_republic_api -f Dockerfile.dev .
-docker run --name spice_republic_api_dev -dit -p 3232:8080 -v $(pwd):/usr/src/app spice_republic_api:latest
-docker exec -it spice_republic_api air
+docker build -t spice-republic-api -f Dockerfile.dev .
+docker run --name spice-republic-api-dev -dit -p 3232:8080 -v $(pwd):/usr/src/app spice-republic-api:latest
+docker exec -it spice-republic-api air
 ```
 
 then open localhost:3232

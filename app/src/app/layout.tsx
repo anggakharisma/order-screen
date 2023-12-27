@@ -29,9 +29,7 @@ export default function RootLayout({
                 <div className="relative flex justify-center align-middle items-center">
                   <p className="mr-4">EN</p>
                   <div>
-                    <div className="w-6 h-3 rounded-t-full bg-blue-600">
-                    </div>
-                    <div className="w-6 h-3 rounded-b-full bg-blue-400">
+                    <div className="w-4 h-4 rounded-full bg-red-600">
                     </div>
                   </div>
                 </div>
