@@ -7,7 +7,6 @@ type OrderCardProps = {
   changeQuantity: ChangeQuantity,
   removeOrder: (hash: string) => void
 }
-
 export default function OrderCard({ orderItem, changeQuantity, removeOrder }: OrderCardProps) {
   return (
     <div className="m-auto w-full relative h-full">
