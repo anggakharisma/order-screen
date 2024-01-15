@@ -13,12 +13,14 @@ import Toast from "../components/Toast";
 function Orders() {
     const getFoods = async () => {
         try {
-            const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`).then(res => res.json());
+            const foodReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`);
+            const data = foodReq.json();
             return data;
         } catch (e) {
             console.log(e);
         }
     }
+
     const { isLoading, data } = useQuery<{ data: Food[] }>(["foods"], getFoods);
     const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
     const [customerName, setCustomerName] = useState<string>("");
@@ -119,14 +121,27 @@ function Orders() {
 
     return (
         <div className="w-4/5 px-20 mb-24">
-            <Modal showModal={isModalOpen} ref={modalRef}>
+            <Modal closeModal={() => setIsModalOpen(false)} showModal={isModalOpen} ref={modalRef}>
                 <h1 className="text-xl text-black font-bold">Confirm your order</h1>
                 <p className="dark:text-black">List all orders</p>
-                {
-                    newOrderItems.map(item => {
-                        return <p className="dark:text-black" key={item.hash}>{item.food.name}</p>
-                    })
-                }
+                <div>
+                    {
+                        newOrderItems.map(item => {
+                            return (
+                                <div key={item.hash}>
+                                    <p className="dark:text-black" key={item.hash}>{item.food.name} {item.amount}</p>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+                <form className="mt-4 flex flex-col items-center justify-center">
+                    <div className="flex flex-col">
+                        <label className="dark:text-black mr-4 font-bold">Your name</label>
+                        <input className="stroke-none outline-none focus:outline-none focus:border-none focus:stroke-none border-gray-400 border-[1px] bg-white dark:text-black mt-2" type="text" placeholder="Your name" />
+                    </div>
+                    <button className="dark:bg-red-600 text-white font-bold px-4 w-1/2 py-2 rounded-lg mt-4">Make order</button>
+                </form>
             </Modal>
 
             <Toast
@@ -155,7 +170,7 @@ function Orders() {
             </div>
             <div className="bg-white w-64 h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
                 <UserOrder removeOrder={removeOrder} changeQuantity={changeQuantity} newOrderItems={newOrderItems} />
-                <button onClick={() => { setIsModalOpen(true) }} className="bg-red-500 px-4 py-2 rounded-full fixed bottom-4 right-16 text-white text-center text-md">Total: {usdCurrency.format(totalOrder)}</button>
+                <button onClick={() => { setIsModalOpen(true) }} className="bg-red-600 px-4 py-2 rounded-full fixed bottom-4 right-16 text-white text-center text-md">Total: {usdCurrency.format(totalOrder)}</button>
             </div>
             <div className="flex justify-around w-full bg-red-900">
                 <div>

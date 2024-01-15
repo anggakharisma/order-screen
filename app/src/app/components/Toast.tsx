@@ -6,7 +6,7 @@ const Modal = ({ children, isVisible, okFunction, cancelFunction }: { children: 
       {children}
       <div className="flex justify-center gap-8 mt-2">
         <button onClick={okFunction} className="bg-white border-green-500 border-solid border-2 p-4 text-green-500 justify-center align-middle items-center gap-2 rounded-lg py-1 flex font-bold">Yes <CheckIcon className='text-green-500' width={18} /></button>
-        <button onClick={cancelFunction} className="bg-red-600 p-6 justify-center align-middle items-center gap-2 rounded-lg py-1 flex">No <XMarkIcon width={18} /></button>
+        <button onClick={cancelFunction} className="bg-white border-red-500 border-solid border-2 p-6 justify-center align-middle items-center gap-2 rounded-lg py-1 flex text-red-500">No <XMarkIcon width={18} /></button>
       </div>
     </div>
   )

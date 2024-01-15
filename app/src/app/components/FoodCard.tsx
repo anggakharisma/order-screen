@@ -10,7 +10,7 @@ type FoodCardProps = {
 export default function FoodCard({ food, setCurrent }: FoodCardProps) {
 
   return (
-    <div className="relative food-card w-full h-72 flex min-w-full flex-col" onClick={() => setCurrent(food)}>
+    <div className="relative food-card w-full h-60 flex min-w-full flex-col" onClick={() => setCurrent(food)}>
       <div className="rounded-full hover:scale-110 transition-all ease-linear hover:cursor-pointer">
         <Image
           src={`${process.env.NEXT_PUBLIC_API_URL}${food.image}` || `/images/food01.jpg`}
@@ -18,7 +18,7 @@ export default function FoodCard({ food, setCurrent }: FoodCardProps) {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-48 min-w-full h-60 object-cover object-center rounded-md hover:rounded-2xl transition-all"
+          className="w-48 min-w-full h-48 object-cover object-center rounded-md hover:rounded-2xl transition-all"
         />
       </div>
       <div className="text-black bg-white -mt-8 z-10 rounded-full w-10/12 px-6 py-2">
