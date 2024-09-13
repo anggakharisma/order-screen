@@ -13,7 +13,12 @@ import Toast from "../components/Toast";
 function Orders() {
     const getFoods = async () => {
         try {
-            const foodReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`);
+            const foodReq = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/foods/`, {
+                headers: new Headers({
+                    'Accept': 'application/json',
+                    'x-api-key': process.env.NEXT_PUBLIC_API_TOKEN
+                })
+            });
             const data = foodReq.json();
             return data;
         } catch (e) {
@@ -138,9 +143,9 @@ function Orders() {
                 <form className="mt-4 flex flex-col items-center justify-center">
                     <div className="flex flex-col">
                         <label className="dark:text-black mr-4 font-bold">Your name</label>
-                        <input className="stroke-none outline-none focus:outline-none focus:border-none focus:stroke-none border-gray-400 border-[1px] bg-white dark:text-black mt-2" type="text" placeholder="Your name" />
+                        <input className="focus:outline-none focus:border-red-400 border-gray-400 border-[1px] bg-white dark:text-black mt-2" type="text" placeholder="Your name" />
                     </div>
-                    <button className="dark:bg-red-600 text-white font-bold px-4 w-1/2 py-2 rounded-lg mt-4">Make order</button>
+                    <button className="dark:bg-red-600 text-white font-bold px-4 py-2 rounded-lg mt-4">Make order</button>
                 </form>
             </Modal>
 
