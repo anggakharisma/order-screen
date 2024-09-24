@@ -5,10 +5,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createHash } from "crypto";
 import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from 'usehooks-ts';
-import Modal from "../components/Modal";
-import Foods from "../components/Orders/Foods";
-import UserOrder from "../components/Orders/UserOrder";
-import Toast from "../components/Toast";
+import Modal from "@/app/components/Modal";
+import Foods from "@/app/components/Orders/Foods";
+import UserOrder from "@/app/components/Orders/UserOrder";
+import Prompt from "@/app/components/Prompt";
 
 function Orders() {
     const getFoods = async () => {
@@ -126,30 +126,37 @@ function Orders() {
 
     return (
         <div className="w-4/5 px-20 mb-24">
+            {
+                // order sidebar section
+            }
             <Modal closeModal={() => setIsModalOpen(false)} showModal={isModalOpen} ref={modalRef}>
-                <h1 className="text-xl text-black font-bold">Confirm your order</h1>
+                <h1 className="text-3xl text-black font-bold">CONFIRM ORDER</h1>
                 <p className="dark:text-black">List all orders</p>
                 <div>
                     {
                         newOrderItems.map(item => {
                             return (
                                 <div key={item.hash}>
-                                    <p className="dark:text-black" key={item.hash}>{item.food.name} {item.amount}</p>
+                                    <p className="dark:text-black" key={item.hash}>{item.food.name} {item.amount} {item.food.price}</p>
                                 </div>
                             );
                         })
                     }
+
+                    <p className="text-black">{totalOrder}</p>
                 </div>
-                <form className="mt-4 flex flex-col items-center justify-center">
+                <form className="mt-4 flex flex-col" onClick={(e) => {
+                    e.preventDefault()
+                }}>
                     <div className="flex flex-col">
                         <label className="dark:text-black mr-4 font-bold">Your name</label>
-                        <input className="focus:outline-none focus:border-red-400 border-gray-400 border-[1px] bg-white dark:text-black mt-2" type="text" placeholder="Your name" />
+                        <input required className="focus:outline-none w-full focus:border-red-400 border-gray-400 border-[1px] bg-white dark:text-black mt-2 rounded-lg" type="text" placeholder="Your name" />
                     </div>
                     <button className="dark:bg-red-600 text-white font-bold px-4 py-2 rounded-lg mt-4">Make order</button>
                 </form>
             </Modal>
 
-            <Toast
+            <Prompt
                 isVisible={showPrompt}
                 okFunction={() => {
                     addOrderItem(currentFood!);
@@ -157,7 +164,7 @@ function Orders() {
                 }}
                 cancelFunction={() => setShowPrompt(false)}>
                 <h2 className="text-xl mb-4 tracking-tighter text-black text-center">Add this item?</h2>
-            </Toast>
+            </Prompt>
             <div className="w-full">
                 <h1 className="text-3xl font-bold">Hello, Good {currentHoursGreeting()}</h1>
                 <h3>Order Here</h3>

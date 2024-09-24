@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,11 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 	}
 
 	return func(c *gin.Context) {
+		uToken := c.GetHeader("x-api-key")
+		if len(uToken) == 0 || uToken != requiredToken {
+			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
+			c.AbortWithStatus(401)
+		}
 		c.Next()
 	}
 }

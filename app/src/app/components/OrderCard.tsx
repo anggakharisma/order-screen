@@ -1,6 +1,7 @@
 import { idrCurrency, usdCurrency } from "@/config/currency";
 import { UserOrderItem, ChangeQuantity } from "@/type";
 import Image from "next/image";
+import Button from "./ui/Button";
 
 type OrderCardProps = {
   orderItem: UserOrderItem,
@@ -24,9 +25,9 @@ export default function OrderCard({ orderItem, changeQuantity, removeOrder }: Or
         <h3 className="text-black">{usdCurrency.format(orderItem.food.price).replace(/(\.|,)00$/g, '')}</h3>
 
         <div className="flex text-black w-full m-auto my-8 justify-center mt-4">
-          <button onClick={() => changeQuantity("DECREASE", orderItem)} className="bg-black text-white px-2">-</button>
+          <Button onClick={() => changeQuantity("DECREASE", orderItem)}>-</Button>
           <input disabled className="w-8 text-center mx-2 p-1 py-1 border-gray-200 border-[1px]" value={orderItem.amount} />
-          <button onClick={() => changeQuantity("INCREASE", orderItem)} className="bg-black text-white px-2">+</button>
+          <Button onClick={() => changeQuantity("INCREASE", orderItem)}>+</Button>
         </div>
       </div>
     </div>

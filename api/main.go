@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -12,6 +13,7 @@ import (
 )
 
 func init() {
+	fmt.Println()
 	db.ConnectDatabase() // Initialize Database
 }
 
@@ -19,8 +21,8 @@ func CORS() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, x-api-key")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH")
 
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
@@ -46,7 +48,7 @@ func main() {
 	r.Static("/images", "./images")
 	r.GET("/health", controllers.HealthCheck)
 
-	v1 := r.Group("/v1/", middlewares.TokenAuthMiddleware())
+	v1 := r.Group("/v1/")
 
 	foodsRoute := v1.Group("/foods", middlewares.TokenAuthMiddleware())
 	{
@@ -75,6 +77,12 @@ func main() {
 
 		extrasRoute.POST("/", controllers.CreateExtra)
 		extrasRoute.PATCH("/:id", controllers.UpdateExtra)
+	}
+
+	measurementTypeRoute := v1.Group("/measurement-type")
+	{
+		measurementTypeRoute.GET("/:id", controllers.FindMeasurementType)
+		measurementTypeRoute.POST("/", controllers.FindMeasurementType)
 	}
 
 	r.Run("0.0.0.0:8080")

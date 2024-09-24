@@ -3,14 +3,12 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"github.com/anggakharisma/spice-republic/api/db"
 	"github.com/anggakharisma/spice-republic/api/models"
+	"github.com/gin-gonic/gin"
 )
 
 type MeasurementTypeRequest struct {
-	gorm.Model
 	Name string `json:"name"`
 }
 
@@ -32,10 +30,10 @@ func CreateMeasurmentType(c *gin.Context) {
 		return
 	}
 
-  measurementType := models.MeasurementType{
-    Name: measurementTypeRequest.Name,
-  }
-  db.DB.Create(&measurementType)
+	measurementType := models.MeasurementType{
+		Name: measurementTypeRequest.Name,
+	}
+	db.DB.Create(&measurementType)
 
-  c.JSON(http.StatusCreated, gin.H{"data": measurementType})
+	c.JSON(http.StatusCreated, gin.H{"message": "Created"})
 }
