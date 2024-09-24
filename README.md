@@ -29,7 +29,7 @@ you need to configure a few settings:
 2. Create a `.env` file in the `api` directory, `cp .env.example.env` and specify the following environment variables:
 
    ```
-   API_TOKEN=http://localhost:8080/api
+   API_TOKEN=<random_api_token>
    ```
 
 ## 🛠️ Installation
