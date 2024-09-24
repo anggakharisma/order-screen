@@ -5,7 +5,7 @@ interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonE
   variant?: 'primary' | 'danger'
 }
 
-export default function Button(props: ButtonProps) {
+export default function Input(props: ButtonProps) {
   return <button {...props} className={clsx(
     'text-white font-bold px-4 py-2 rounded-lg mt-4',
     {

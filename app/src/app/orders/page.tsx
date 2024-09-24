@@ -1,14 +1,15 @@
 "use client";
+import Modal from "@/app/components/Modal";
+import Foods from "@/app/components/Orders/Foods";
+import UserOrder from "@/app/components/Orders/UserOrder";
+import Prompt from "@/app/components/Prompt";
 import { usdCurrency } from "@/config/currency";
 import { ChangeQuantity, Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createHash } from "crypto";
 import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from 'usehooks-ts';
-import Modal from "@/app/components/Modal";
-import Foods from "@/app/components/Orders/Foods";
-import UserOrder from "@/app/components/Orders/UserOrder";
-import Prompt from "@/app/components/Prompt";
+import Button from "../components/ui/Button";
 
 function Orders() {
     const getFoods = async () => {
@@ -152,7 +153,11 @@ function Orders() {
                         <label className="dark:text-black mr-4 font-bold">Your name</label>
                         <input required className="focus:outline-none w-full focus:border-red-400 border-gray-400 border-[1px] bg-white dark:text-black mt-2 rounded-lg" type="text" placeholder="Your name" />
                     </div>
-                    <button className="dark:bg-red-600 text-white font-bold px-4 py-2 rounded-lg mt-4">Make order</button>
+                    <div className="flex flex-col mt-4">
+                        <label className="dark:text-black mr-4 font-bold">Phone Number (Optional)</label>
+                        <input required className="focus:outline-none w-full focus:border-red-400 border-gray-400 border-[1px] bg-white dark:text-black mt-2 rounded-lg" type="text" placeholder="0813157218123" />
+                    </div>
+                    <Button onClick={() => console.log("Yeet")} variant="primary">Make order</Button>
                 </form>
             </Modal>
 
