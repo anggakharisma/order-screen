@@ -3,8 +3,9 @@ package requests
 import "github.com/anggakharisma/spice-republic/api/models"
 
 type OrderRequest struct {
-	Name       string             `json:"name" binding:"required"`
-	OrderItems []OrderItemRequest `json:"order_items" binding:"required,dive"`
+	Name        string             `json:"name" binding:"required"`
+	PhoneNumber string             `json:"phone_number`
+	OrderItems  []OrderItemRequest `json:"order_items" binding:"required,dive"`
 }
 
 type OrderItemExtrasRequest struct {

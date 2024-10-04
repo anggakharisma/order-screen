@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 
@@ -13,7 +12,6 @@ import (
 )
 
 func init() {
-	fmt.Println()
 	db.ConnectDatabase() // Initialize Database
 }
 
