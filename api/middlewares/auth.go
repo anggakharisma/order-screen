@@ -21,6 +21,7 @@ func TokenAuthMiddleware() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 		uToken := c.GetHeader("x-api-key")
+		log.Printf("t1: %s\n t2: %s", uToken, requiredToken)
 		if len(uToken) == 0 || uToken != requiredToken {
 			c.JSON(http.StatusUnauthorized, gin.H{"message": "Unauthorized"})
 			c.AbortWithStatus(401)

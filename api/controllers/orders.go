@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -18,14 +19,27 @@ type UpdateOrderInput struct {
 
 func FindOrders(c *gin.Context) {
 	var orders []models.Order
-	db.DB.Find(&orders)
+	err := db.DB.Model(&models.Order{}).
+		Preload("OrderItems").
+		Preload("OrderItems.Food").
+		Preload("OrderItems.OrderItemExtras").
+		Find(&orders).Error
+	if err != nil {
+		log.Println("Something went wrong")
+	}
 	c.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
 func FindOrder(c *gin.Context) {
 	var order models.Order
 
-	if err := db.DB.Where("id = ? ", c.Param("id")).First(&order); err.Error != nil {
+	if err := db.DB.Where("id = ? ", c.Param("id")).
+		Preload("OrderItems").
+		Preload("OrderItems.Food").
+		Preload("OrderItems.Food.Extras").
+		Preload("OrderItems.OrderItemExtras").
+		Preload("OrderItems.OrderItemExtras.Extra").
+		First(&order); err.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't found that order"})
 		return
 	}

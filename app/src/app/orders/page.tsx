@@ -21,14 +21,59 @@ function Orders() {
                     'x-api-key': process.env.NEXT_PUBLIC_API_TOKEN
                 })
             });
+            if (!foodReq.ok) {
+                throw new Error(JSON.stringify(await foodReq.json()))
+            }
+
             const data = foodReq.json();
             return data;
-        } catch (e) {
-            console.log(e);
+        } catch (e: any) {
+            console.log(e.message);
         }
     }
 
-    const { isLoading, data } = useQuery<{ data: Food[] }>(["foods"], getFoods);
+    const { isLoading, data, isError } = useQuery<{ data: Food[] }>(["foods"], getFoods);
+
+    const orderMutation = useMutation({
+        onError: (e) => {
+            console.log(e)
+        },
+        onSuccess: (data) => {
+            console.log(data)
+        },
+        mutationFn: async () => {
+            const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
+                let orderItem: OrderItemRequest = {
+                    amount: newOrderItem.amount,
+                    food_id: newOrderItem.food.ID,
+                    order_item_extras: newOrderItem.order_item_extras || []
+                }
+
+                return orderItem;
+            });
+
+            const orders: OrderRequest = {
+                name: 'Roy',
+                order_items: orderItems,
+            };
+
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(orders)
+            })
+
+            if (!response.ok) {
+                throw new Error(JSON.stringify(await response.json()))
+            }
+
+            return response.json()
+        }
+    })
+
+
     const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
     const [customerName, setCustomerName] = useState<string>("");
     const [showPrompt, setShowPrompt] = useState(false);
@@ -71,32 +116,6 @@ function Orders() {
         setNewOrderItems(newOrderItems.filter(item => item.hash != hash));
     }
 
-    const orderMutation = useMutation({
-        mutationFn: async () => {
-            const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
-                let orderItem: OrderItemRequest = {
-                    amount: newOrderItem.amount,
-                    food_id: newOrderItem.food.ID,
-                    order_item_extras: newOrderItem.order_item_extras || []
-                }
-
-                return orderItem;
-            });
-
-            const orders: OrderRequest = {
-                name: customerName,
-                order_items: orderItems,
-            };
-
-            return fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(orders)
-            }).then(response => response.json())
-        }
-    });
 
     const changeQuantity: ChangeQuantity = (actionType: string, orderItem: UserOrderItem) => {
         switch (actionType) {
@@ -147,8 +166,9 @@ function Orders() {
 
                     <p className="text-black">{totalOrder}</p>
                 </div>
-                <form className="mt-4 flex flex-col" onClick={(e) => {
+                <form className="mt-4 flex flex-col" onSubmit={(e) => {
                     e.preventDefault()
+                    orderMutation.mutate()
                 }}>
                     <div className="flex flex-col">
                         <label className="dark:text-black mr-4 font-bold">Your name</label>
@@ -158,7 +178,7 @@ function Orders() {
                         <label className="dark:text-black mr-4 font-bold">Phone Number (Optional)</label>
                         <Input required type="text" placeholder="0813157218123" />
                     </div>
-                    <Button onClick={() => console.log("Yeet")} variant="primary">Make order</Button>
+                    <Button type="submit" variant="primary">Make order</Button>
                 </form>
             </Modal>
 
@@ -175,9 +195,12 @@ function Orders() {
                 <h1 className="text-3xl font-bold">Hello, Good {currentHoursGreeting()}</h1>
                 <h3>Order Here</h3>
                 {
+                    isError && <h3>There&lsquo;s a problem reaching the server, please contact employee</h3>
+                }
+                {
                     isLoading ? <h3>Loading</h3> :
                         <Foods
-                            data={data!.data}
+                            data={isError ? [] : data!.data}
                             setCurrent={(food) => {
                                 if (showPrompt) return;
                                 setShowPrompt(true);

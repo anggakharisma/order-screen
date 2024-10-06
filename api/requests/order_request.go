@@ -1,6 +1,8 @@
 package requests
 
-import "github.com/anggakharisma/spice-republic/api/models"
+import (
+	"github.com/anggakharisma/spice-republic/api/models"
+)
 
 type OrderRequest struct {
 	Name        string             `json:"name" binding:"required"`
