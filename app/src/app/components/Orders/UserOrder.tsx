@@ -9,13 +9,13 @@ type UserOrderProps = {
 
 export default function UserOrder({ removeOrder, changeQuantity, newOrderItems }: UserOrderProps) {
 	return (
-		<>
-			<p className="mb-6 font-semibold text-black">Your Order</p>
+		<div className="w-full">
+			<p className="mb-2 font-medium text-center py-2 rounded-lg dark:text-black text-md text-black">YOUR ORDER</p>
 			<div className="px-2">
 				{
 					newOrderItems.map((item, id) => <OrderCard removeOrder={removeOrder} changeQuantity={changeQuantity} key={id} orderItem={item} />).reverse()
 				}
 			</div>
-		</>
+		</div>
 	);
 }

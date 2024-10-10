@@ -6,7 +6,7 @@ import (
 
 type OrderRequest struct {
 	Name        string             `json:"name" binding:"required"`
-	PhoneNumber string             `json:"phone_number`
+	PhoneNumber string             `json:"phone_number"`
 	OrderItems  []OrderItemRequest `json:"order_items" binding:"required,dive"`
 }
 

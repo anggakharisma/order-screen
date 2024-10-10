@@ -3,14 +3,69 @@ import Modal from "@/app/components/Modal";
 import Foods from "@/app/components/Orders/Foods";
 import UserOrder from "@/app/components/Orders/UserOrder";
 import Prompt from "@/app/components/Prompt";
+import Button from "@/app/components/ui/Button";
+import Input from "@/app/components/ui/Input";
 import { usdCurrency } from "@/config/currency";
 import { ChangeQuantity, Food, OrderItemRequest, OrderRequest, UserOrderItem } from "@/type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createHash } from "crypto";
 import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from 'usehooks-ts';
-import Button from "@/app/components/ui/Button";
-import Input from "@/app/components/ui/Input";
+
+type OrderModalProps = {
+    newOrderItems: UserOrderItem[],
+    setNewOrderItems: React.Dispatch<React.SetStateAction<UserOrderItem[]>>
+    totalOrder: number,
+    orderMutation: any,
+    orderReady: boolean,
+    setOrderReady: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const OrderModal = ({ newOrderItems, totalOrder, orderMutation, orderReady, setOrderReady, setNewOrderItems }: OrderModalProps) => {
+    return (
+        <>
+            <h1 className="text-2xl mb-4 text-black font-bold">CONFIRM ORDER</h1>
+            <div>
+                <div className="mb-2 flex flex-col gap-2">
+                    {
+                        newOrderItems.map(item => {
+                            return (
+                                <div key={item.hash}>
+                                    <div className="grid grid-cols-3 justify-center justify-self-center border-black border-b-[1px] pb-2">
+                                        <p className="relative dark:text-black text-white w-full h-full font-medium before:w-10 before:h-10 before:bg-red-600">{item.food.name}</p>
+                                        <p className="dark:text-black text-white justify-self-center">{usdCurrency.format(item.food.price)} x {item.amount}</p>
+                                        <p className="dark:text-black text-white justify-self-end">{usdCurrency.format(item.food.price * item.amount)}</p>
+                                    </div>
+                                </div>
+                            );
+                        })
+                    }
+                </div>
+
+                <p className="text-black text-md mt-2"><span className="font-bold">Total: </span>{usdCurrency.format(totalOrder)}</p>
+
+            </div>
+            <form className="mt-4 flex flex-col" onSubmit={(e: any) => {
+                e.preventDefault()
+                const formData = new FormData(e.target);
+                let data: { [key: string]: string } = {}
+                for (let [key, value] of formData.entries()) {
+                    data[key] = `${value}`;
+                    console.log(`${key}: ${value}`);
+                }
+                orderMutation.mutate(data)
+                setNewOrderItems([])
+            }}>
+                <div className="flex flex-col">
+                    <label className="dark:text-black mr-4 font-bold">Your name</label>
+                    <Input name="customer-name" autoFocus required type="text" placeholder="Your name" />
+                </div>
+                <Button type="submit" variant="primary">Make order</Button>
+            </form>
+
+        </>
+    )
+}
 
 function Orders() {
     const getFoods = async () => {
@@ -39,9 +94,10 @@ function Orders() {
             console.log(e)
         },
         onSuccess: (data) => {
+            setIsOrderReady(true)
             console.log(data)
         },
-        mutationFn: async () => {
+        mutationFn: async (data: { [key: string]: string }) => {
             const orderItems: OrderItemRequest[] = newOrderItems.map((newOrderItem: UserOrderItem) => {
                 let orderItem: OrderItemRequest = {
                     amount: newOrderItem.amount,
@@ -53,7 +109,7 @@ function Orders() {
             });
 
             const orders: OrderRequest = {
-                name: 'Roy',
+                name: data['customer-name'],
                 order_items: orderItems,
             };
 
@@ -75,7 +131,7 @@ function Orders() {
 
 
     const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
-    const [customerName, setCustomerName] = useState<string>("");
+    const [isOrderReady, setIsOrderReady] = useState(false)
     const [showPrompt, setShowPrompt] = useState(false);
     const [currentFood, setCurrentFood] = useState<Food>();
     const [totalOrder, setTotalOrder] = useState<number>(0);
@@ -83,6 +139,7 @@ function Orders() {
     const modalRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
     useOnClickOutside(modalRef, () => setIsModalOpen(false));
+
 
     useEffect(() => {
         let currentTotal = 0;
@@ -151,35 +208,7 @@ function Orders() {
                 // order sidebar section
             }
             <Modal closeModal={() => setIsModalOpen(false)} showModal={isModalOpen} ref={modalRef}>
-                <h1 className="text-3xl text-black font-bold">CONFIRM ORDER</h1>
-                <p className="dark:text-black">List all orders</p>
-                <div>
-                    {
-                        newOrderItems.map(item => {
-                            return (
-                                <div key={item.hash}>
-                                    <p className="dark:text-black" key={item.hash}>{item.food.name} {item.amount} {item.food.price}</p>
-                                </div>
-                            );
-                        })
-                    }
-
-                    <p className="text-black">{totalOrder}</p>
-                </div>
-                <form className="mt-4 flex flex-col" onSubmit={(e) => {
-                    e.preventDefault()
-                    orderMutation.mutate()
-                }}>
-                    <div className="flex flex-col">
-                        <label className="dark:text-black mr-4 font-bold">Your name</label>
-                        <Input autoFocus required type="text" placeholder="Your name" />
-                    </div>
-                    <div className="flex flex-col mt-4">
-                        <label className="dark:text-black mr-4 font-bold">Phone Number (Optional)</label>
-                        <Input required type="text" placeholder="0813157218123" />
-                    </div>
-                    <Button type="submit" variant="primary">Make order</Button>
-                </form>
+                {!isOrderReady ? <OrderModal setNewOrderItems={setNewOrderItems} setOrderReady={setIsOrderReady} orderReady={isOrderReady} newOrderItems={newOrderItems} orderMutation={orderMutation} totalOrder={totalOrder} /> : <p className="dark:text-black text-white">Order proccessed, dont forget take your ticket!</p>}
             </Modal>
 
             <Prompt
@@ -209,9 +238,15 @@ function Orders() {
                             isLoading={isLoading} />
                 }
             </div>
-            <div className="bg-white w-64 h-full fixed right-0 bottom-0 p-6 overflow-y-scroll py-12">
+            <div className="bg-white w-56 h-full flex justify-center align-middle fixed right-1 bottom-0 overflow-y-auto py-8 px-4">
                 <UserOrder removeOrder={removeOrder} changeQuantity={changeQuantity} newOrderItems={newOrderItems} />
-                <button onClick={() => { setIsModalOpen(true) }} className="bg-red-600 px-4 py-2 rounded-full fixed bottom-4 right-16 text-white text-center text-md">Total: {usdCurrency.format(totalOrder)}</button>
+                <div className="flex flex-col fixed bottom-10">
+                    <p className="text-white dark:text-black text-center text-md font-medium">Total: {usdCurrency.format(totalOrder)}</p>
+                    {newOrderItems.length > 0 && <button onClick={() => {
+                        setIsModalOpen(true)
+                        setIsOrderReady(false)
+                    }} className="text-black rounded-md dark:text-white px-4 py-2 bg-red-600 text-md">Make Order</button>}
+                </div>
             </div>
             <div className="flex justify-around w-full bg-red-900">
                 <div>

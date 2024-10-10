@@ -7,7 +7,7 @@ interface ButtonProps extends DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonE
 
 export default function Button(props: ButtonProps) {
   return <button {...props} className={clsx(
-    'text-white font-bold px-4 py-2 rounded-lg mt-4',
+    'text-white font-bold px-4 py-2 rounded-lg',
     {
       'dark:bg-red-600': props.variant === 'primary',
       'bg-black': !props.variant
