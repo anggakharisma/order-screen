@@ -10,7 +10,8 @@ import { ChangeQuantity, Food, OrderItemRequest, OrderRequest, UserOrderItem } f
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createHash } from "crypto";
 import { useEffect, useRef, useState } from "react";
-import { useOnClickOutside } from 'usehooks-ts';
+import { useOnClickOutside } from "usehooks-ts";
+
 
 type OrderModalProps = {
     newOrderItems: UserOrderItem[],
@@ -140,7 +141,6 @@ function Orders() {
 
     useOnClickOutside(modalRef, () => setIsModalOpen(false));
 
-
     useEffect(() => {
         let currentTotal = 0;
         newOrderItems.map(item => {
@@ -149,7 +149,7 @@ function Orders() {
         setTotalOrder(currentTotal);
 
         window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
-    }, [newOrderItems, modalRef]);
+    }, [newOrderItems]);
 
     const addOrderItem = (food: Food) => {
         const hash = createHash("md5").update(String(food.ID) + food.name).digest("hex");
