@@ -1,4 +1,4 @@
-FROM golang:1.20
+FROM docker.io/golang:1.20
 WORKDIR /app
 ENV MODE=production
 ENV GIN_MODE=release

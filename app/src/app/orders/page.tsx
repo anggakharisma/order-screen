@@ -12,7 +12,6 @@ import { createHash } from "crypto";
 import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 
-
 type OrderModalProps = {
     newOrderItems: UserOrderItem[],
     setNewOrderItems: React.Dispatch<React.SetStateAction<UserOrderItem[]>>
@@ -129,7 +128,6 @@ function Orders() {
             return response.json()
         }
     })
-
 
     const [newOrderItems, setNewOrderItems] = useState<UserOrderItem[]>(JSON.parse(window.localStorage.getItem("newOrderItems") || "[]"));
     const [isOrderReady, setIsOrderReady] = useState(false)

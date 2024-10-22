@@ -13,7 +13,7 @@ go run .
 open http://localhost:8080
 
 // if you want to use auto-reload add this
-go install github.com/cosmtrek/air@latest
+go install github.com/air-verse/air@latest
 
 and then just run 
 
