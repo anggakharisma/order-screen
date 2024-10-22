@@ -58,7 +58,7 @@ func main() {
 		foodsRoute.DELETE("/:id", controllers.DeleteFood)
 	}
 
-	ordersRoute := v1.Group("/orders")
+	ordersRoute := v1.Group("/orders", middlewares.TokenAuthMiddleware())
 	{
 		ordersRoute.GET("/", controllers.FindOrders)
 		ordersRoute.GET("/:id", controllers.FindOrder)
@@ -68,7 +68,7 @@ func main() {
 		ordersRoute.PATCH("/:id", controllers.UpdateOrder)
 	}
 
-	extrasRoute := v1.Group("/extras")
+	extrasRoute := v1.Group("/extras", middlewares.TokenAuthMiddleware())
 	{
 		extrasRoute.GET("/", controllers.FindExtras)
 		extrasRoute.GET("/:id", controllers.FindExtra)
@@ -77,7 +77,7 @@ func main() {
 		extrasRoute.PATCH("/:id", controllers.UpdateExtra)
 	}
 
-	measurementTypeRoute := v1.Group("/measurement-type")
+	measurementTypeRoute := v1.Group("/measurement-type", middlewares.TokenAuthMiddleware())
 	{
 		measurementTypeRoute.GET("/:id", controllers.FindMeasurementType)
 		measurementTypeRoute.POST("/", controllers.FindMeasurementType)
