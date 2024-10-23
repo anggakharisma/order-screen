@@ -54,7 +54,6 @@ const OrderModal = ({ newOrderItems, totalOrder, orderMutation, orderReady, setO
                     console.log(`${key}: ${value}`);
                 }
                 orderMutation.mutate(data)
-                setNewOrderItems([])
             }}>
                 <div className="flex flex-col">
                     <label className="dark:text-black mr-4 font-bold">Your name</label>
@@ -95,6 +94,7 @@ function Orders() {
         },
         onSuccess: (data) => {
             setIsOrderReady(true)
+            setNewOrderItems([])
             console.log(data)
         },
         mutationFn: async (data: { [key: string]: string }) => {
@@ -108,6 +108,8 @@ function Orders() {
                 return orderItem;
             });
 
+            console.log(orderItems, newOrderItems)
+
             const orders: OrderRequest = {
                 name: data['customer-name'],
                 order_items: orderItems,
@@ -116,7 +118,8 @@ function Orders() {
             const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}v1/orders/`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'x-api-key': process.env.NEXT_PUBLIC_API_TOKEN
                 },
                 body: JSON.stringify(orders)
             })
@@ -140,11 +143,7 @@ function Orders() {
     useOnClickOutside(modalRef, () => setIsModalOpen(false));
 
     useEffect(() => {
-        let currentTotal = 0;
-        newOrderItems.map(item => {
-            currentTotal += item.amount * item.food.price;
-        });
-        setTotalOrder(currentTotal);
+        setTotalOrder(newOrderItems.reduce((a, b) => a + b.food.price * b.amount, 0));
 
         window.localStorage.setItem("newOrderItems", JSON.stringify(newOrderItems));
     }, [newOrderItems]);
@@ -157,6 +156,8 @@ function Orders() {
             food: food,
             amount: 1
         }
+
+        setTotalOrder(totalOrder + food.price)
 
         const foodExist = newOrderItems.some(orderItem => orderItem.hash === hash);
         if (!foodExist) {
