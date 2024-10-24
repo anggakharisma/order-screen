@@ -1,19 +1,19 @@
-# Spice Republic
+# DARS
 
 <p align="center">
-  <img src="app/public/images/logo.svg" alt="Spice Republic Logo">
+  <img src="app/public/images/logo.svg" alt="DARS Logo">
 </p>
 
 <img src="./preview2.jpg">
 
-Spice Republic is a comprehensive order screen application designed specifically for restaurants. It provides a user-friendly interface for managing orders efficiently and effectively. This repository contains the source code for both the frontend and backend of the application, which are built using Next.js, Tailwind CSS, SQLite, and Go. The project also includes Docker support for easy containerization.
+DARS is a comprehensive order screen application designed specifically for restaurants. It provides a user-friendly interface for managing orders efficiently and effectively. This repository contains the source code for both the frontend and backend of the application, which are built using Next.js, Tailwind CSS, SQLite, and Go. The project also includes Docker support for easy containerization.
 
 ## 🚀 Features
 
-- **Order management:** Spice Republic enables restaurant staff to manage incoming orders effectively, facilitating a streamlined workflow.
+- **Order management:** DARS enables restaurant staff to manage incoming orders effectively, facilitating a streamlined workflow.
 - **User-friendly interface:** The application offers an intuitive and easy-to-use interface, ensuring a smooth user experience for restaurant staff.
 - **Next.js and Tailwind CSS:** The frontend is built using Next.js, a popular React framework, and styled with Tailwind CSS, providing a responsive and visually appealing design.
-- **SQLite and Go:** The backend of Spice Republic utilizes SQLite as the database management system and Go as the programming language, ensuring a robust and efficient server-side implementation.
+- **SQLite and Go:** The backend of DARS utilizes SQLite as the database management system and Go as the programming language, ensuring a robust and efficient server-side implementation.
 - **Docker support:** The project supports Docker, allowing for easy deployment and containerization of the application.
 
 
@@ -34,7 +34,7 @@ you need to configure a few settings:
    ```
 
 ## 🛠️ Installation
-To set up Spice Republic locally, follow these steps:
+To set up DARS locally, follow these steps:
 
 1. Clone the repository:
 
@@ -64,7 +64,7 @@ To set up Spice Republic locally, follow these steps:
 
 ## 🚀 Usage
 
-To start the Spice Republic application, follow these steps:
+To start the DARS application, follow these steps:
 
 1. In the `app` directory, run the following command:
 
@@ -84,11 +84,11 @@ To start the Spice Republic application, follow these steps:
    This will start the api server.
    Check api README.md for more information, like docker usage
 
-3. Open your browser and visit `http://localhost:3000` to access Spice Republic.
+3. Open your browser and visit `http://localhost:3000` to access DARS.
 
 ## 👥 Contributing
 
-Contributions to Spice Republic are welcome! If you find any issues or have suggestions for improvement, please feel free to open an issue or submit a pull request.
+Contributions to DARS are welcome! If you find any issues or have suggestions for improvement, please feel free to open an issue or submit a pull request.
 
 ## 📄 License
 
@@ -98,7 +98,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 We would like to acknowledge the following open-source projects and libraries that were used in the development of
 
- Spice Republic:
+ DARS:
 
 - Next.js: [https://nextjs.org](https://nextjs.org)
 - Tailwind CSS: [https://tailwindcss.com](https://tailwindcss.com)

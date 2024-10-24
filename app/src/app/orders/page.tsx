@@ -180,18 +180,12 @@ function Orders() {
             </div>
             <div className="bg-white w-56 h-full flex justify-center align-middle fixed right-1 bottom-0 overflow-y-auto py-8 px-4">
                 <UserOrder removeOrder={removeOrder} changeQuantity={changeQuantity} newOrderItems={newOrderItems} />
-                <div className="flex flex-col fixed bottom-10">
-                    <p className="text-white dark:text-black text-center text-md font-medium">Total: {usdCurrency.format(totalOrder)}</p>
+                <div className="flex flex-col fixed bottom-0 bg-white p-8">
+                    <p className="text-white dark:text-black text-center text-md font-medium mb-2">Total: {usdCurrency.format(totalOrder)}</p>
                     {newOrderItems.length > 0 && <button onClick={() => {
                         setIsModalOpen(true)
                         setIsOrderReady(false)
-                    }} className="text-black rounded-md dark:text-white px-4 py-2 bg-red-600 text-md">Make Order</button>}
-                </div>
-            </div>
-            <div className="flex justify-around w-full bg-red-900">
-                <div>
-                </div>
-                <div>
+                    }} className="text-black b-0 rounded-md dark:text-white px-4 py-2 bg-red-600 text-md">Make Order</button>}
                 </div>
             </div>
         </div>

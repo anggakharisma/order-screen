@@ -10,7 +10,7 @@ type FoodCardProps = {
 export default function FoodCard({ food, setCurrent }: FoodCardProps) {
 
 	return (
-		<div className="relative food-card w-full h-60 flex min-w-full flex-col rounded-full" onClick={() => setCurrent(food)}>
+		<div className="relative food-card w-full h-80 flex min-w-full flex-col rounded-full" onClick={() => setCurrent(food)}>
 			<div
 				className="border-solid border-4 border-transparent transition-all ease-linear hover:cursor-pointer rounded-md opacity-1">
 
