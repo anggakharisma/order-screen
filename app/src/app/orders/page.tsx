@@ -146,7 +146,7 @@ function Orders() {
     }
 
     return (
-        <div className="w-4/5 px-20 mb-24">
+        <div className="w-4/5 px-20 mb-8">
             <Modal closeModal={() => setIsModalOpen(false)} showModal={isModalOpen} ref={modalRef}>
                 {!isOrderReady ? <OrderModal setNewOrderItems={setNewOrderItems} setOrderReady={setIsOrderReady} orderReady={isOrderReady} newOrderItems={newOrderItems} orderMutation={orderMutation} totalOrder={totalOrder} /> : <p className="dark:text-black text-white">Order proccessed, dont forget take your ticket!</p>}
             </Modal>

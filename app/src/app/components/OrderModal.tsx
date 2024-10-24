@@ -22,7 +22,7 @@ const OrderModal = ({ newOrderItems, totalOrder, orderMutation, orderReady, setO
                         newOrderItems.map(item => {
                             return (
                                 <div key={item.hash}>
-                                    <div className="grid grid-cols-3 justify-center justify-self-center border-black border-b-[1px] pb-2">
+                                    <div className="grid grid-cols-3 justify-center border-black border-b-[1px] pb-2">
                                         <p className="relative dark:text-black text-white w-full h-full font-medium before:w-10 before:h-10 before:bg-red-600">{item.food.name}</p>
                                         <p className="dark:text-black text-white justify-self-center">{usdCurrency.format(item.food.price)} x {item.amount}</p>
                                         <p className="dark:text-black text-white justify-self-end">{usdCurrency.format(item.food.price * item.amount)}</p>

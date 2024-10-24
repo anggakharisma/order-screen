@@ -10,7 +10,7 @@ type FoodsProps = {
 export default function Foods({ isLoading, data, setCurrent }: FoodsProps) {
 	return (
 		!isLoading ?
-			<div className="w-full grid grid-cols-3 gap-y-4 gap-12 mt-8">
+			<div className="w-full grid grid-cols-3 gap-y-4 gap-6 mt-8">
 				{
 					data.map((food: Food) => <FoodCard setCurrent={setCurrent} food={food} key={food.ID}></FoodCard>)
 				}

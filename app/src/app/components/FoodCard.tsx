@@ -19,8 +19,7 @@ export default function FoodCard({ food, setCurrent }: FoodCardProps) {
 					alt={food.name + " Image"}
 					width="0"
 					height="0"
-					sizes="100vw"
-					className="w-48 min-w-full h-48 object-cover object-center transition-all rounded-md"
+					className="min-w-full w-60 xl:h-72 xl:w-56 h-60 object-cover bg-center transition-all rounded-md"
 				/>
 			</div>
 			<div className="text-black bg-white -mt-8 z-10 rounded-full w-10/12 px-6 py-2">
