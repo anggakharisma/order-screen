@@ -30,17 +30,33 @@ func FindOrders(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
+func GetOrdersToday(c *gin.Context) {
+	var orders []models.Order
+	err := db.DB.Where("").Model(&models.Order{}).
+		Preload("OrderItems").
+		Preload("OrderItems.Food").
+		Preload("OrderItems.OrderItemExtras").
+		Find(&orders).
+		Error
+	if err != nil {
+		log.Println("Something went wrong")
+	}
+	c.JSON(http.StatusOK, gin.H{"data": orders})
+}
+
 func FindOrder(c *gin.Context) {
 	var order models.Order
 
 	if err := db.DB.Where("id = ? ", c.Param("id")).
+		First(&order).
 		Preload("OrderItems").
 		Preload("OrderItems.Food").
 		Preload("OrderItems.Food.Extras").
 		Preload("OrderItems.OrderItemExtras").
 		Preload("OrderItems.OrderItemExtras.Extra").
+
 		First(&order); err.Error != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Can't found that order"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Can't found that order"})
 		return
 	}
 

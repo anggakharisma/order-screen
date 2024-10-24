@@ -25,8 +25,7 @@ function Orders() {
                 throw new Error(JSON.stringify(await foodReq.json()))
             }
 
-            const data = foodReq.json();
-            return data;
+            return foodReq.json()
         } catch (e: any) {
             console.log(e.message);
         }
