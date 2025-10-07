@@ -35,3 +35,9 @@ then open localhost:3232
 ```
 docker build -t spice_republic_api -f Dockerfile .
 docker run -dit -e API_TOKEN=<API_TOKEN> --name spice_republic_api_prod -p 3244:8080  spice_republic_api_production:latest
+```
+
+
+## Troubleshoot
+Kill tuck air process: `lsof -t -i tcp:8080 | xargs kill -9`
+

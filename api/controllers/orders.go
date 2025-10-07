@@ -27,6 +27,7 @@ func FindOrders(c *gin.Context) {
 	if err != nil {
 		log.Println("Something went wrong")
 	}
+
 	c.JSON(http.StatusOK, gin.H{"data": orders})
 }
 
