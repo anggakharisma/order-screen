@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	db.ConnectDatabase() // Initialize Database
+	db.ConnectDatabase()
 }
 
 func CORS() gin.HandlerFunc {

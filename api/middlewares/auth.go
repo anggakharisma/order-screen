@@ -8,10 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func respondWithError(c *gin.Context, code int, message interface{}) {
-	c.AbortWithStatusJSON(code, gin.H{"errror": message})
-}
-
 func TokenAuthMiddleware() gin.HandlerFunc {
 	requiredToken := os.Getenv("API_TOKEN")
 
