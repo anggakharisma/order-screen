@@ -14,6 +14,7 @@ export default function Kitchen() {
           'x-api-key': process.env.NEXT_PUBLIC_API_TOKEN
         })
       });
+
       if (!orderReq.ok) {
         throw new Error(JSON.stringify(await orderReq.json()))
       }
@@ -21,8 +22,6 @@ export default function Kitchen() {
       return await orderReq.json()
     }
   })
-
-  console.log(data)
 
   return (
     <div className="w-4/5 px-20 mb-24">
@@ -46,11 +45,9 @@ export default function Kitchen() {
               )
             })
           }
-
         </div>
       }
       <h1>Kitchen</h1>
     </div>
   )
-
 }

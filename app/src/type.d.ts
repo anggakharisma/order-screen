@@ -34,13 +34,13 @@ export interface OrderItemExtras {
 }
 
 export interface Order {
-  ID: number;
+  ID?: number;
   name: string;
-  CreatedAt: string;
-  UpdatedAt: string;
-  DeletedAt: string;
-  order_status: number;
-  order_type: number;
+  CreatedAt?: string;
+  UpdatedAt?: string;
+  DeletedAt?: string;
+  order_status?: number;
+  order_type?: number;
   order_items: OrderItem[]
 }
 

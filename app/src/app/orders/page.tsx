@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 import { useOnClickOutside } from "usehooks-ts";
 import OrderModal from "../components/OrderModal";
 
-
 function Orders() {
     const getFoods = async () => {
         try {
